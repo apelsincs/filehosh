@@ -1,0 +1,662 @@
+/* Современные темы для 0123.ru */
+
+:root {
+  /* Светлая тема (по умолчанию) */
+  --md-primary: #1976d2;
+  --md-primary-variant: #1565c0;
+  --md-primary-light: #42a5f5;
+  --md-primary-dark: #0d47a1;
+  
+  --md-secondary: #ff6b35;
+  --md-secondary-variant: #e55a2b;
+  --md-secondary-light: #ff8a65;
+  --md-secondary-dark: #d84315;
+  
+  --md-surface: #ffffff;
+  --md-surface-variant: #f5f5f5;
+  --md-surface-dark: #eeeeee;
+  
+  --md-background: #fafafa;
+  --md-background-variant: #f5f5f5;
+  
+  --md-on-primary: #ffffff;
+  --md-on-secondary: #ffffff;
+  --md-on-surface: #212121;
+  --md-on-surface-variant: #757575;
+  --md-on-background: #212121;
+  
+  /* Дополнительные цвета для лучшего контраста */
+  --md-form-border: #e0e0e0;
+  --md-form-border-focus: #1976d2;
+  --md-form-background: #ffffff;
+  --md-form-text: #212121;
+  --md-form-placeholder: #9e9e9e;
+  
+  --md-error: #d32f2f;
+  --md-error-variant: #b71c1c;
+  --md-success: #388e3c;
+  --md-success-variant: #2e7d32;
+  --md-warning: #f57c00;
+  --md-warning-variant: #ef6c00;
+  --md-info: #1976d2;
+  --md-info-variant: #1565c0;
+  
+  /* Material Design тени */
+  --md-elevation-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  --md-elevation-2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  --md-elevation-3: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  --md-elevation-4: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  --md-elevation-5: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  
+  /* Material Design радиусы */
+  --md-radius-small: 4px;
+  --md-radius-medium: 8px;
+  --md-radius-large: 16px;
+  --md-radius-extra: 24px;
+  
+  /* Material Design переходы */
+  --md-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --md-transition-medium: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --md-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Material Design типографика */
+  --md-font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --md-font-size-small: 12px;
+  --md-font-size-body: 14px;
+  --md-font-size-body-large: 16px;
+  --md-font-size-title: 20px;
+  --md-font-size-headline: 24px;
+  --md-font-size-display: 34px;
+  --md-font-size-display-large: 45px;
+  
+  /* Material Design отступы */
+  --md-spacing-xs: 4px;
+  --md-spacing-sm: 8px;
+  --md-spacing-md: 16px;
+  --md-spacing-lg: 24px;
+  --md-spacing-xl: 32px;
+  --md-spacing-xxl: 48px;
+}
+
+/* Темная тема */
+[data-theme="dark"] {
+  --md-primary: #90caf9;
+  --md-primary-variant: #42a5f5;
+  --md-primary-light: #e3f2fd;
+  --md-primary-dark: #1976d2;
+  
+  --md-secondary: #ffb74d;
+  --md-secondary-variant: #ffa726;
+  --md-secondary-light: #ffe0b2;
+  --md-secondary-dark: #ff9800;
+  
+  --md-surface: #121212;
+  --md-surface-variant: #1e1e1e;
+  --md-surface-dark: #0a0a0a;
+  
+  --md-background: #000000;
+  --md-background-variant: #121212;
+  
+  --md-on-primary: #000000;
+  --md-on-secondary: #000000;
+  --md-on-surface: #ffffff;
+  --md-on-surface-variant: #b3b3b3;
+  --md-on-background: #ffffff;
+  
+  /* Дополнительные цвета для лучшего контраста в темной теме */
+  --md-form-border: #424242;
+  --md-form-border-focus: #90caf9;
+  --md-form-background: #1e1e1e;
+  --md-form-text: #ffffff;
+  --md-form-placeholder: #9e9e9e;
+  
+  --md-error: #f44336;
+  --md-error-variant: #d32f2f;
+  --md-success: #4caf50;
+  --md-success-variant: #388e3c;
+  --md-warning: #ff9800;
+  --md-warning-variant: #f57c00;
+  --md-info: #2196f3;
+  --md-info-variant: #1976d2;
+  
+  /* Темные тени */
+  --md-elevation-1: 0 1px 3px rgba(255,255,255,0.12), 0 1px 2px rgba(255,255,255,0.24);
+  --md-elevation-2: 0 3px 6px rgba(255,255,255,0.16), 0 3px 6px rgba(255,255,255,0.23);
+  --md-elevation-3: 0 10px 20px rgba(255,255,255,0.19), 0 6px 6px rgba(255,255,255,0.23);
+  --md-elevation-4: 0 14px 28px rgba(255,255,255,0.25), 0 10px 10px rgba(255,255,255,0.22);
+  --md-elevation-5: 0 19px 38px rgba(255,255,255,0.30), 0 15px 12px rgba(255,255,255,0.22);
+}
+
+/* Базовые Material Design стили */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--md-font-family);
+  font-size: var(--md-font-size-body);
+  line-height: 1.5;
+  color: var(--md-on-surface);
+  background-color: var(--md-background);
+  margin: 0;
+  padding: 0;
+  transition: background-color var(--md-transition-medium), color var(--md-transition-medium);
+}
+
+/* Material Design кнопки */
+.md-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--md-spacing-sm) var(--md-spacing-lg);
+  border: none;
+  border-radius: var(--md-radius-medium);
+  font-family: var(--md-font-family);
+  font-size: var(--md-font-size-body);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all var(--md-transition-medium);
+  text-decoration: none;
+  min-height: 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.md-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width var(--md-transition-medium), height var(--md-transition-medium);
+}
+
+.md-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.md-btn:active {
+  transform: scale(0.98);
+}
+
+/* Primary кнопка */
+.md-btn-primary {
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
+  box-shadow: var(--md-elevation-1);
+}
+
+.md-btn-primary:hover {
+  background-color: var(--md-primary-variant);
+  box-shadow: var(--md-elevation-2);
+}
+
+/* Secondary кнопка */
+.md-btn-secondary {
+  background-color: var(--md-secondary);
+  color: var(--md-on-secondary);
+  box-shadow: var(--md-elevation-1);
+}
+
+.md-btn-secondary:hover {
+  background-color: var(--md-secondary-variant);
+  box-shadow: var(--md-elevation-2);
+}
+
+/* Outlined кнопка */
+.md-btn-outlined {
+  background-color: transparent;
+  color: var(--md-primary);
+  border: 2px solid var(--md-primary);
+}
+
+.md-btn-outlined:hover {
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
+}
+
+/* Text кнопка */
+.md-btn-text {
+  background-color: transparent;
+  color: var(--md-primary);
+  padding: var(--md-spacing-sm) var(--md-spacing-md);
+}
+
+.md-btn-text:hover {
+  background-color: rgba(25, 118, 210, 0.04);
+}
+
+/* Material Design карточки */
+.md-card {
+  background-color: var(--md-surface);
+  border-radius: var(--md-radius-medium);
+  box-shadow: var(--md-elevation-1);
+  transition: box-shadow var(--md-transition-medium);
+  overflow: hidden;
+}
+
+.md-card:hover {
+  box-shadow: var(--md-elevation-2);
+}
+
+.md-card-header {
+  padding: var(--md-spacing-lg);
+  border-bottom: 1px solid var(--md-surface-variant);
+}
+
+.md-card-body {
+  padding: var(--md-spacing-lg);
+}
+
+.md-card-footer {
+  padding: var(--md-spacing-lg);
+  border-top: 1px solid var(--md-surface-variant);
+  background-color: var(--md-surface-variant);
+}
+
+/* Material Design поля ввода */
+.md-input {
+  width: 100%;
+  padding: var(--md-spacing-md);
+  border: 2px solid var(--md-surface-variant);
+  border-radius: var(--md-radius-small);
+  font-family: var(--md-font-family);
+  font-size: var(--md-font-size-body);
+  background-color: var(--md-surface);
+  color: var(--md-on-surface);
+  transition: border-color var(--md-transition-medium), box-shadow var(--md-transition-medium);
+}
+
+.md-input:focus {
+  outline: none;
+  border-color: var(--md-primary);
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+.md-input:disabled {
+  background-color: var(--md-surface-variant);
+  color: var(--md-on-surface-variant);
+  cursor: not-allowed;
+}
+
+/* Material Design переключатель темы */
+.md-theme-switcher {
+  display: flex;
+  align-items: center;
+  gap: var(--md-spacing-sm);
+  padding: var(--md-spacing-sm);
+  border-radius: var(--md-radius-medium);
+  background-color: var(--md-surface);
+  box-shadow: var(--md-elevation-1);
+}
+
+.md-theme-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--md-on-surface);
+  cursor: pointer;
+  transition: all var(--md-transition-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.md-theme-btn:hover {
+  background-color: var(--md-surface-variant);
+}
+
+.md-theme-btn.active {
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
+}
+
+/* Material Design навигация */
+.md-navbar {
+  background-color: var(--md-surface);
+  box-shadow: var(--md-elevation-2);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.md-navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--md-spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.md-navbar-brand {
+  font-size: var(--md-font-size-headline);
+  font-weight: 500;
+  color: var(--md-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: var(--md-spacing-sm);
+}
+
+.md-navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--md-spacing-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.md-navbar-link {
+  color: var(--md-on-surface);
+  text-decoration: none;
+  padding: var(--md-spacing-sm) var(--md-spacing-md);
+  border-radius: var(--md-radius-small);
+  transition: background-color var(--md-transition-medium);
+}
+
+.md-navbar-link:hover {
+  background-color: var(--md-surface-variant);
+}
+
+/* Material Design контейнер */
+.md-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--md-spacing-lg);
+}
+
+/* Material Design сетка */
+.md-grid {
+  display: grid;
+  gap: var(--md-spacing-lg);
+}
+
+.md-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.md-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.md-grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+/* Material Design отступы */
+.md-section {
+  padding: var(--md-spacing-xxl) 0;
+}
+
+.md-section-sm {
+  padding: var(--md-spacing-lg) 0;
+}
+
+.md-section-lg {
+  padding: calc(var(--md-spacing-xxl) * 2) 0;
+}
+
+/* Material Design типографика */
+.md-title {
+  font-size: var(--md-font-size-title);
+  font-weight: 500;
+  margin: 0 0 var(--md-spacing-md) 0;
+  color: var(--md-on-surface);
+}
+
+.md-headline {
+  font-size: var(--md-font-size-headline);
+  font-weight: 400;
+  margin: 0 0 var(--md-spacing-lg) 0;
+  color: var(--md-on-surface);
+}
+
+.md-display {
+  font-size: var(--md-font-size-display);
+  font-weight: 300;
+  margin: 0 0 var(--md-spacing-lg) 0;
+  color: var(--md-on-surface);
+}
+
+.md-body {
+  font-size: var(--md-font-size-body);
+  line-height: 1.6;
+  color: var(--md-on-surface-variant);
+  margin: 0 0 var(--md-spacing-md) 0;
+}
+
+/* Material Design анимации */
+@keyframes md-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes md-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes md-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes md-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.md-animate-fade-in {
+  animation: md-fade-in 0.6s ease-out;
+}
+
+.md-animate-scale-in {
+  animation: md-scale-in 0.4s ease-out;
+}
+
+.md-animate-slide-in-left {
+  animation: md-slide-in-left 0.5s ease-out;
+}
+
+.md-animate-slide-in-right {
+  animation: md-slide-in-right 0.5s ease-out;
+}
+
+/* Material Design утилиты */
+.md-text-center {
+  text-align: center;
+}
+
+.md-text-left {
+  text-align: left;
+}
+
+.md-text-right {
+  text-align: right;
+}
+
+.md-mb-0 { margin-bottom: 0; }
+.md-mb-sm { margin-bottom: var(--md-spacing-sm); }
+.md-mb-md { margin-bottom: var(--md-spacing-md); }
+.md-mb-lg { margin-bottom: var(--md-spacing-lg); }
+.md-mb-xl { margin-bottom: var(--md-spacing-xl); }
+
+.md-mt-0 { margin-top: 0; }
+.md-mt-sm { margin-top: var(--md-spacing-sm); }
+.md-mt-md { margin-top: var(--md-spacing-md); }
+.md-mt-lg { margin-top: var(--md-spacing-lg); }
+.md-mt-xl { margin-top: var(--md-spacing-xl); }
+
+.md-p-0 { padding: 0; }
+.md-p-sm { padding: var(--md-spacing-sm); }
+.md-p-md { padding: var(--md-spacing-md); }
+.md-p-lg { padding: var(--md-spacing-lg); }
+.md-p-xl { padding: var(--md-spacing-xl); }
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .md-container {
+    padding: 0 var(--md-spacing-md);
+  }
+  
+  .md-navbar-container {
+    padding: 0 var(--md-spacing-md);
+  }
+  
+  .md-grid-2,
+  .md-grid-3,
+  .md-grid-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .md-section {
+    padding: var(--md-spacing-lg) 0;
+  }
+  
+  .md-display {
+    font-size: var(--md-font-size-headline);
+  }
+}
+
+/* Специальные стили для карточек файлов в темной теме */
+[data-theme="dark"] .recent-file-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .recent-file-card::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+}
+
+[data-theme="dark"] .recent-file-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Специальные стили для карточек файлов в светлой теме */
+[data-theme="light"] .recent-file-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="light"] .recent-file-card::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+}
+
+[data-theme="light"] .recent-file-card:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Стили для feature-card в темной теме */
+[data-theme="dark"] .feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .feature-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Стили для feature-card в светлой теме */
+[data-theme="light"] .feature-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="light"] .feature-card:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Стили для обычных карточек в темной теме */
+[data-theme="dark"] .card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Стили для обычных карточек в светлой теме */
+[data-theme="light"] .card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="light"] .card:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Стили для страницы "Мои файлы" в темной теме */
+[data-theme="dark"] .text-muted {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+[data-theme="dark"] .card-title {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+[data-theme="dark"] .card-body {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+[data-theme="dark"] .stat-item strong {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+[data-theme="dark"] .stat-item small {
+  color: rgba(255, 255, 255, 0.6) !important;
+} 

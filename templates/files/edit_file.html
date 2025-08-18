@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Редактировать {{ file.filename }} - 0123.ru{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Page Header -->
+            <div class="text-center mb-5">
+                <h2 class="mb-3">
+                    <i class="fas fa-edit me-2"></i>
+                    Редактировать файл
+                </h2>
+                <p class="lead text-muted">
+                    Измените настройки файла "{{ file.filename }}"
+                </p>
+            </div>
+
+            <!-- File Info Card -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-file me-2"></i>
+                        Информация о файле
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Имя файла:</strong> {{ file.filename }}</p>
+                            <p><strong>Размер:</strong> {{ file.get_file_size_mb }} МБ</p>
+                            <p><strong>Загружен:</strong> {{ file.created_at|date:"d.m.Y H:i" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Код:</strong> <span class="badge bg-primary">{{ file.code }}</span></p>
+                            <p><strong>Скачиваний:</strong> {{ file.download_count }}</p>
+                            <p><strong>Истекает:</strong> {{ file.expires_at|date:"d.m.Y H:i" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Form Card -->
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>
+                        Настройки файла
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- New Code -->
+                        <div class="mb-4">
+                            <label for="{{ form.new_code.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-hashtag me-2"></i>Новый код
+                            </label>
+                            {{ form.new_code }}
+                            {% if form.new_code.help_text %}
+                                <div class="form-text">
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Любые символы, до 50 знаков. Оставьте пустым, чтобы не изменять.
+                                    </small>
+                                </div>
+                            {% endif %}
+                            {% if form.new_code.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.new_code.errors %}
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- New Password -->
+                        <div class="mb-4">
+                            <label for="{{ form.new_password.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-lock me-2"></i>Новый пароль
+                            </label>
+                            {{ form.new_password }}
+                            {% if form.new_password.help_text %}
+                                <div class="form-text">{{ form.new_password.help_text }}</div>
+                            {% endif %}
+                            {% if form.new_password.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.new_password.errors %}
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Current Status -->
+                        <div class="alert alert-info">
+                            <h6 class="alert-heading">
+                                <i class="fas fa-info-circle me-2"></i>Текущий статус
+                            </h6>
+                            <p class="mb-2">
+                                <strong>Защита:</strong> 
+                                {% if file.is_protected %}
+                                    <span class="badge bg-warning">
+                                        <i class="fas fa-lock me-1"></i>Защищен паролем
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-unlock me-1"></i>Открытый доступ
+                                    </span>
+                                {% endif %}
+                            </p>
+                            <p class="mb-0">
+                                <strong>Осталось времени:</strong> {{ file.get_remaining_time }}
+                            </p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>
+                                Сохранить изменения
+                            </button>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="{% url 'files:file_detail' file.code %}" 
+                                       class="btn btn-outline-secondary w-100">
+                                        <i class="fas fa-arrow-left me-2"></i>
+                                        Вернуться к файлу
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{% url 'files:delete_file' file.code %}" 
+                                       class="btn btn-outline-danger w-100">
+                                        <i class="fas fa-trash me-2"></i>
+                                        Удалить файл
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="card shadow-sm border-0 mt-4">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">
+                        <i class="fas fa-question-circle me-2"></i>
+                        Справка
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Код файла:</h6>
+                            <ul class="small text-muted">
+                                <li>Любые символы</li>
+                                <li>До 50 знаков</li>
+                                <li>Должен быть уникальным</li>
+                                <li>Оставьте пустым, чтобы не изменять</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Пароль:</h6>
+                            <ul class="small text-muted">
+                                <li>Любая длина</li>
+                                <li>Любые символы</li>
+                                <li>Оставьте пустым, чтобы убрать пароль</li>
+                                <li>Защищает файл от несанкционированного доступа</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript для валидации кода в реальном времени -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const newCodeInput = document.getElementById('newCode');
+    if (newCodeInput) {
+        let debounceTimer;
+        
+        newCodeInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            const code = this.value.trim();
+            
+            // Убираем предыдущие ошибки
+            this.classList.remove('is-invalid');
+            const existingError = this.parentNode.querySelector('.field-error');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            // Убираем popover
+            const existingPopover = document.querySelector('.code-occupied-popover');
+            if (existingPopover) {
+                existingPopover.remove();
+            }
+            
+            if (code && code.length > 0) {
+                debounceTimer = setTimeout(async function() {
+                    try {
+                        const response = await fetch(`/check-code/?code=${encodeURIComponent(code)}`);
+                        const result = await response.json();
+                        
+                        if (!result.available) {
+                            // Показываем popover
+                            showCodeOccupiedPopover(newCodeInput, 'Этот код уже используется. Выберите другой.');
+                            // Подсвечиваем поле как неверное
+                            newCodeInput.classList.add('is-invalid');
+                        }
+                    } catch (error) {
+                        console.log('Ошибка при проверке кода:', error);
+                    }
+                }, 500);
+            }
+        });
+    }
+    
+    // Функция для показа popover о занятом коде
+    function showCodeOccupiedPopover(inputElement, message) {
+        // Убираем существующий popover
+        const existingPopover = document.querySelector('.code-occupied-popover');
+        if (existingPopover) {
+            existingPopover.remove();
+        }
+        
+        // Создаем popover
+        const popover = document.createElement('div');
+        popover.className = 'code-occupied-popover';
+        popover.innerHTML = `
+            <div class="popover-content">
+                <div class="popover-header">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    <span>Код уже занят</span>
+                </div>
+                <div class="popover-body">
+                    ${message}
+                </div>
+            </div>
+        `;
+        
+        // Позиционируем popover
+        const rect = inputElement.getBoundingClientRect();
+        popover.style.position = 'absolute';
+        popover.style.top = `${rect.bottom + 5}px`;
+        popover.style.left = `${rect.left}px`;
+        popover.style.zIndex = '9999';
+        
+        // Добавляем в DOM
+        document.body.appendChild(popover);
+        
+        // Автоматически скрываем через 5 секунд
+        setTimeout(() => {
+            if (popover.parentNode) {
+                popover.remove();
+            }
+        }, 5000);
+        
+        // Скрываем при клике вне popover
+        document.addEventListener('click', function hidePopover(e) {
+            if (!popover.contains(e.target) && e.target !== inputElement) {
+                popover.remove();
+                document.removeEventListener('click', hidePopover);
+            }
+        });
+    }
+});
+</script>
+{% endblock %} 

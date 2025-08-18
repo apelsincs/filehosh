@@ -1,0 +1,133 @@
+from django.db import models
+from django.utils import timezone
+from django.conf import settings
+import os
+import qrcode
+from io import BytesIO
+from django.core.files.base import ContentFile
+from PIL import Image
+
+
+class File(models.Model):
+    """
+    Модель для хранения информации о загруженных файлах.
+    Поддерживает автоматическую генерацию QR кодов, защиту паролем
+    и связывание с анонимными сессиями пользователей.
+    """
+    
+    # Основные поля файла
+    file = models.FileField(upload_to='uploads/', verbose_name='Файл')
+    filename = models.CharField(max_length=255, verbose_name='Имя файла')
+    file_size = models.BigIntegerField(verbose_name='Размер файла (байт)')
+    
+    # Идентификация и доступ
+    code = models.CharField(max_length=10, unique=True, verbose_name='Код файла')
+    password = models.CharField(max_length=128, blank=True, null=True, verbose_name='Пароль')
+    is_protected = models.BooleanField(default=False, verbose_name='Защищен паролем')
+    
+    # Анонимная сессия пользователя
+    session_id = models.CharField(max_length=64, blank=True, null=True, verbose_name='ID анонимной сессии')
+    
+    # Временные метки
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    expires_at = models.DateTimeField(verbose_name='Дата истечения')
+    
+    # QR код
+    qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True, verbose_name='QR код')
+    
+    # Статистика
+    download_count = models.PositiveIntegerField(default=0, verbose_name='Количество скачиваний')
+    last_downloaded = models.DateTimeField(blank=True, null=True, verbose_name='Последнее скачивание')
+    
+    # Флаг удаления (для подсчета всех загруженных файлов)
+    is_deleted = models.BooleanField(default=False, verbose_name='Файл удален')
+    
+    class Meta:
+        verbose_name = 'Файл'
+        verbose_name_plural = 'Файлы'
+        ordering = ['-created_at']
+        # Индекс для быстрого поиска файлов по сессии
+        indexes = [
+            models.Index(fields=['session_id', 'created_at']),
+            models.Index(fields=['session_id', 'expires_at']),
+        ]
+    
+    def __str__(self):
+        return f"{self.code} - {self.filename}"
+    
+    def save(self, *args, **kwargs):
+        """Переопределяем save для автоматической генерации QR кода"""
+        if not self.pk:  # Только при создании нового файла
+            self.generate_qr_code()
+        super().save(*args, **kwargs)
+    
+    def generate_qr_code(self):
+        """Генерирует QR код со ссылкой на файл"""
+        from django.urls import reverse
+        # Используем SITE_BASE_URL из настроек и корректный namespaced url
+        base = getattr(settings, 'SITE_BASE_URL', 'http://localhost:8000')
+        file_url = f"{base}{reverse('files:file_detail', kwargs={'code': self.code})}"
+        
+        # Генерируем QR код
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=settings.QR_CODE_SIZE,
+            border=4,
+        )
+        qr.add_data(file_url)
+        qr.make(fit=True)
+        
+        # Создаем изображение
+        img = qr.make_image(fill_color="black", back_color="white")
+        
+        # Сохраняем в BytesIO
+        buffer = BytesIO()
+        img.save(buffer, format='PNG')
+        buffer.seek(0)
+        
+        # Сохраняем как ImageField
+        self.qr_code.save(f'qr_{self.code}.png', ContentFile(buffer.getvalue()), save=False)
+    
+    def get_file_size_mb(self):
+        """Возвращает размер файла в мегабайтах"""
+        return round(self.file_size / (1024 * 1024), 2)
+    
+    def is_expired(self):
+        """Проверяет, истек ли срок действия файла"""
+        return timezone.now() > self.expires_at
+    
+    def increment_download_count(self):
+        """Увеличивает счетчик скачиваний"""
+        self.download_count += 1
+        self.last_downloaded = timezone.now()
+        self.save(update_fields=['download_count', 'last_downloaded'])
+    
+    def get_remaining_time(self):
+        """Возвращает оставшееся время жизни файла"""
+        if self.is_expired():
+            return "Файл истек"
+        
+        remaining = self.expires_at - timezone.now()
+        hours = int(remaining.total_seconds() // 3600)
+        minutes = int((remaining.total_seconds() % 3600) // 60)
+        
+        if hours > 0:
+            return f"{hours}ч {minutes}м"
+        else:
+            return f"{minutes}м"
+    
+    def delete(self, *args, **kwargs):
+        """Удаляет физический файл при удалении записи"""
+        if self.file:
+            if os.path.isfile(self.file.path):
+                os.remove(self.file.path)
+        if self.qr_code:
+            if os.path.isfile(self.qr_code.path):
+                os.remove(self.qr_code.path)
+        
+        # Вместо удаления записи помечаем как удаленную
+        self.is_deleted = True
+        self.save()
+        
+        # Не вызываем super().delete() - сохраняем запись для статистики

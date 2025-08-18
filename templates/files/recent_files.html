@@ -1,0 +1,308 @@
+{% extends 'base.html' %}
+
+{% block title %}Последние файлы - 0123.ru{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Page Header -->
+            <div class="text-center mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <a href="{% url 'files:home' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Назад
+                    </a>
+                    <h2 class="mb-0">
+                        <i class="fas fa-user me-2"></i>
+                        Мои файлы
+                        {% if has_files %}
+                            <span class="badge bg-primary ms-2">{{ total_files }}</span>
+                        {% endif %}
+                    </h2>
+                    <div style="width: 100px;"></div> <!-- Spacer для центрирования заголовка -->
+                </div>
+                <p class="lead text-muted">
+                    {% if has_session %}
+                        {% if has_files %}
+                            Ваши загруженные файлы
+                        {% else %}
+                            В текущей сессии вы еще не загружали файлы
+                        {% endif %}
+                    {% else %}
+                        Для просмотра ваших файлов необходимо загрузить хотя бы один файл
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- Files Grid -->
+            {% if has_files and page_obj %}
+                <div class="row">
+                    {% for file in page_obj %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header bg-transparent border-0 pb-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge {% if file.is_protected %}bg-warning{% else %}bg-success{% endif %}">
+                                        {% if file.is_protected %}
+                                            <i class="fas fa-lock me-1"></i>Защищен
+                                        {% else %}
+                                            <i class="fas fa-unlock me-1"></i>Открытый
+                                        {% endif %}
+                                    </span>
+                                    <small class="text-muted">{{ file.get_remaining_time }}</small>
+                                </div>
+                            </div>
+                            
+                            <div class="card-body">
+                                <div class="d-flex align-items-start mb-3">
+                                    <div class="file-icon me-3">
+                                        <i class="fas fa-file fa-2x"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="card-title mb-1" title="{{ file.filename }}">
+                                            {{ file.filename|truncatechars:25 }}
+                                        </h6>
+                                        <p class="text-muted small mb-0">
+                                            Код: <strong>{{ file.code }}</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="file-stats mb-3">
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <div class="stat-item">
+                                                <small class="text-muted d-block">Размер</small>
+                                                <strong>{{ file.get_file_size_mb }} МБ</strong>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="stat-item">
+                                                <small class="text-muted d-block">Скачиваний</small>
+                                                <strong>{{ file.download_count }}</strong>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="stat-item">
+                                                <small class="text-muted d-block">Загружен</small>
+                                                <strong>{{ file.created_at|date:"d.m" }}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-grid gap-2">
+                                    <a href="{% url 'files:file_detail' file.code %}" 
+                                       class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i>
+                                        Просмотреть
+                                    </a>
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'files:download_file' file.code %}" 
+                                           class="btn btn-outline-success btn-sm">
+                                            <i class="fas fa-download me-1"></i>
+                                            Скачать
+                                        </a>
+                                        <a href="{% url 'files:edit_file' file.code %}" 
+                                           class="btn btn-outline-secondary btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-footer bg-transparent">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>
+                                        {{ file.created_at|date:"d.m.Y H:i" }}
+                                    </small>
+                                    <small class="text-muted">
+                                        Истекает: {{ file.expires_at|date:"d.m H:i" }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                <nav aria-label="Навигация по страницам" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                
+                <!-- Page Info -->
+                <div class="text-center mt-3">
+                    <small class="text-muted">
+                        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                        ({{ total_files }} файлов всего)
+                    </small>
+                </div>
+                {% endif %}
+                
+            {% else %}
+                <!-- No Files -->
+                <div class="text-center py-5">
+                    {% if has_session %}
+                        <div class="empty-state">
+                            <i class="fas fa-folder-open fa-4x text-muted mb-4"></i>
+                            <h4 class="mb-3">У вас пока нет файлов</h4>
+                            <p class="text-muted mb-4">
+                                В текущей сессии вы еще не загружали файлы.
+                                <br>Загрузите первый файл, чтобы начать!
+                            </p>
+                            <a href="{% url 'files:home' %}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-upload me-2"></i>
+                                Загрузить файл
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle fa-4x text-warning mb-4"></i>
+                            <h4 class="mb-3">Сессия не найдена</h4>
+                            <p class="text-muted mb-4">
+                                Для просмотра ваших файлов необходимо загрузить хотя бы один файл.
+                                <br>Это создаст анонимную сессию для вас.
+                            </p>
+                            <a href="{% url 'files:home' %}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-upload me-2"></i>
+                                Загрузить файл
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.stat-item {
+    padding: 8px 0;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.stat-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.file-icon {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .file-icon {
+    transform: scale(1.1);
+}
+
+/* Стили для пустого состояния */
+.empty-state {
+    padding: 3rem 1rem;
+    background: linear-gradient(135deg, rgba(25, 118, 210, 0.05) 0%, rgba(25, 118, 210, 0.02) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(25, 118, 210, 0.1);
+}
+
+.empty-state i {
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.empty-state:hover i {
+    opacity: 0.8;
+}
+
+.empty-state .btn {
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
+}
+
+.empty-state .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 118, 210, 0.3);
+}
+
+/* Стили для кнопки "Назад" */
+.btn-outline-secondary {
+    transition: all 0.3s ease;
+    border-width: 2px;
+}
+
+.btn-outline-secondary:hover {
+    transform: translateX(-3px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+/* Адаптивность для пустого состояния */
+@media (max-width: 768px) {
+    .empty-state {
+        padding: 2rem 1rem;
+        margin: 0 1rem;
+    }
+    
+    .empty-state i {
+        font-size: 3rem !important;
+    }
+    
+    .empty-state h4 {
+        font-size: 1.25rem;
+    }
+    
+    .empty-state p {
+        font-size: 0.9rem;
+    }
+    
+    /* Скрываем кнопку "Назад" на мобильных */
+    .btn-outline-secondary {
+        display: none;
+    }
+    
+    /* Центрируем заголовок на мобильных */
+    .d-flex.justify-content-between {
+        justify-content: center !important;
+    }
+}
+</style>
+{% endblock %} 

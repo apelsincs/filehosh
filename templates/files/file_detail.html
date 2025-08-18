@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ file.filename }} - 0123.ru{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- File Info Card -->
+            <div class="card shadow-lg border-0 mb-4 file-info-card">
+                <div class="card-header bg-gradient-primary text-white text-center py-4">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <div class="file-icon-large me-3">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div>
+                            <h3 class="mb-1">{{ file.filename }}</h3>
+                            <p class="mb-0 opacity-75">Информация о файле</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <!-- File Details -->
+                            <div class="file-details-grid mb-4">
+                                <div class="detail-card">
+                                    <div class="detail-icon">
+                                        <i class="fas fa-hashtag"></i>
+                                    </div>
+                                    <div class="detail-content">
+                                        <div class="detail-label">Код файла</div>
+                                        <div class="detail-value fw-bold text-primary">{{ file.code }}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-card">
+                                    <div class="detail-icon">
+                                        <i class="fas fa-weight-hanging"></i>
+                                    </div>
+                                    <div class="detail-content">
+                                        <div class="detail-label">Размер</div>
+                                        <div class="detail-value">{{ file.get_file_size_mb }} МБ</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-card">
+                                    <div class="detail-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="detail-content">
+                                        <div class="detail-label">Загружен</div>
+                                        <div class="detail-value">{{ file.created_at|date:"d.m.Y H:i" }}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-card">
+                                    <div class="detail-icon">
+                                        <i class="fas fa-hourglass-half"></i>
+                                    </div>
+                                    <div class="detail-content">
+                                        <div class="detail-label">Истекает</div>
+                                        <div class="detail-value {% if file.is_expired %}text-danger{% endif %}">
+                                            {{ file.expires_at|date:"d.m.Y H:i" }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-card">
+                                    <div class="detail-icon">
+                                        <i class="fas fa-download"></i>
+                                    </div>
+                                    <div class="detail-content">
+                                        <div class="detail-label">Скачиваний</div>
+                                        <div class="detail-value">{{ file.download_count }}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-card">
+                                    <div class="detail-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div class="detail-content">
+                                        <div class="detail-label">Защита</div>
+                                        <div class="detail-value">
+                                            {% if file.is_protected %}
+                                                <span class="badge bg-warning">
+                                                    <i class="fas fa-lock me-1"></i>Пароль
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-unlock me-1"></i>Открытый
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="action-buttons">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <a href="{% url 'files:download_file' file.code %}" 
+                                           class="btn btn-primary btn-lg w-100">
+                                            <i class="fas fa-download me-2"></i>
+                                            Скачать файл
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <a href="{% url 'files:edit_file' file.code %}" 
+                                           class="btn btn-outline-secondary btn-lg w-100">
+                                            <i class="fas fa-edit me-2"></i>
+                                            Редактировать
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <button class="btn btn-outline-info btn-lg w-100 copy-link-btn" 
+                                             data-url="{{ file_url }}" onclick="copyToClipboard('{{ file_url }}')">
+                                            <i class="fas fa-link me-2"></i>
+                                            Копировать ссылку
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <a href="{% url 'files:delete_file' file.code %}" 
+                                           class="btn btn-outline-danger btn-lg w-100">
+                                            <i class="fas fa-trash me-2"></i>
+                                            Удалить файл
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <!-- QR Code -->
+                            <div class="qr-code-section text-center">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-qrcode me-2"></i>
+                                    QR код
+                                </h5>
+                                {% if file.qr_code %}
+                                    <div class="qr-code-container mb-3">
+                                        <img src="{{ file.qr_code.url }}" 
+                                             alt="QR код для файла {{ file.code }}" 
+                                             class="img-fluid border rounded">
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-sm btn-outline-primary" 
+                                                onclick="window.downloadQRCode(document.querySelector('.qr-code-container img'))">
+                                            <i class="fas fa-download me-1"></i>
+                                            Скачать QR код
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary copy-link-btn" type="button"
+                                                data-url="{{ file_url }}" onclick="copyToClipboard('{{ file_url }}')">
+                                            <i class="fas fa-share me-1"></i>
+                                            Поделиться
+                                        </button>
+                                    </div>
+                                {% else %}
+                                    <div class="qr-code-placeholder p-4 border rounded">
+                                        <i class="fas fa-qrcode fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted">QR код генерируется...</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File URL Card -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-link me-2"></i>
+                        Ссылка на файл
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ file_url }}" 
+                               id="fileUrl" readonly>
+                        <button class="btn btn-outline-primary copy-link-btn" type="button" 
+                                 data-url="{{ file_url }}" onclick="copyToClipboard('{{ file_url }}')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="form-text mt-2">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Поделитесь этой ссылкой для доступа к файлу
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Remaining Card -->
+            <div class="card shadow-sm border-0" id="time-remaining-card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-hourglass-half me-2"></i>
+                        Оставшееся время
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="progress mb-3" style="height: 25px;">
+                        <div id="time-remaining-progress" class="progress-bar bg-warning" style="width: 75%"></div>
+                    </div>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-clock me-1"></i>
+                        Файл будет автоматически удален {{ file.expires_at|date:"d.m.Y в H:i" }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Отладочная информация (убрать в продакшене) -->
+{% if debug %}
+<div class="container mt-3">
+    <div class="alert alert-info">
+        <strong>Отладка:</strong> file_url = {{ file_url }}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Live update remaining time progress
+document.addEventListener('DOMContentLoaded', () => {
+    const progress = document.getElementById('time-remaining-progress');
+    if (!progress) return;
+    const createdAt = new Date('{{ file.created_at|date:"c" }}').getTime();
+    const expiresAt = new Date('{{ file.expires_at|date:"c" }}').getTime();
+    const total = expiresAt - createdAt;
+    const update = () => {
+        const now = Date.now();
+        const remaining = Math.max(0, expiresAt - now);
+        const percent = Math.max(0, Math.min(100, (remaining / total) * 100));
+        progress.style.width = `${percent}%`;
+        progress.textContent = remaining <= 0 ? 'Файл истек' : (window.Utils ? window.Utils.formatTimeRemaining('{{ file.expires_at|date:"c" }}') : '');
+        progress.setAttribute('aria-valuemin', '0');
+        progress.setAttribute('aria-valuemax', '100');
+        progress.setAttribute('aria-valuenow', String(Math.round(percent)));
+        progress.setAttribute('role', 'progressbar');
+        if (remaining <= 0) {
+            progress.classList.remove('bg-warning');
+            progress.classList.add('bg-danger');
+        }
+    };
+    update();
+    setInterval(update, 60000);
+});
+
+// Проверяем, что функции копирования доступны
+console.log('copyToClipboard function available:', typeof copyToClipboard !== 'undefined');
+console.log('file_url from template:', '{{ file_url }}');
+</script>
+{% endblock %} 

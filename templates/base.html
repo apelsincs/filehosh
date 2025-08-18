@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}0123.ru - Быстрая передача файлов{% endblock %}</title>
+    <meta name="theme-color" content="#1976d2">
+    <meta name="description" content="{% block description %}Быстрый и безопасный файловый хостинг для передачи файлов. Анонимные сессии, защита паролем, автоматическое удаление.{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}файловый хостинг, передача файлов, обмен файлами, загрузка файлов, 0123.ru{% endblock %}">
+    <meta name="author" content="0123.ru">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% block canonical %}{{ request.build_absolute_uri }}{% endblock %}">
+    <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.svg' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/themes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="theme-light">
+    <a href="#main" class="visually-hidden-focusable">Перейти к основному содержимому</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Основная навигация">
+        <div class="navbar-container">
+            <!-- Logo -->
+            <a class="navbar-brand" href="{% url 'files:home' %}">
+                <i class="fas fa-cloud-upload-alt"></i>
+                0123.ru
+            </a>
+            
+            <!-- Center Navigation -->
+            <div class="navbar-center">
+                <a class="nav-link" href="{% url 'files:home' %}">
+                    <i class="fas fa-home"></i>
+                    <span>Главная</span>
+                </a>
+                <a class="nav-link" href="{% url 'files:recent_files' %}">
+                    <i class="fas fa-user"></i>
+                    <span>Мои файлы</span>
+                </a>
+            </div>
+            
+            <!-- Right Side Actions -->
+            <div class="navbar-actions">
+                <!-- Search Form -->
+                <form class="search-form" method="GET" action="{% url 'files:search_files' %}" role="search" aria-label="Поиск по файлам">
+                    <div class="search-input-group">
+                        <label for="global-search" class="visually-hidden">Поиск файлов</label>
+                        <input id="global-search" class="search-input" type="search" name="q" placeholder="Поиск среди ваших файлов..." 
+                               aria-label="Поиск" value="{{ request.GET.q }}">
+                        <button class="search-btn" type="submit" aria-label="Найти">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Theme Switcher -->
+                <div class="theme-switcher" role="group" aria-label="Переключение темы">
+                    <button class="theme-btn" data-theme="light" title="Светлая тема (Ctrl+T)" aria-label="Светлая тема" aria-pressed="true">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                    <button class="theme-btn" data-theme="dark" title="Темная тема (Ctrl+T)" aria-label="Темная тема" aria-pressed="false">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {% if message.tags == 'success' %}
+                        <i class="fas fa-check-circle me-2"></i>
+                    {% elif message.tags == 'error' %}
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                    {% elif message.tags == 'warning' %}
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                    {% elif message.tags == 'info' %}
+                        <i class="fas fa-info-circle me-2"></i>
+                    {% endif %}
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main id="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>0123.ru</h5>
+                    <p class="text-muted">Быстрая и безопасная передача файлов</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted">&copy; 2025 0123.ru. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="{% static 'js/themes.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    <!-- Отладочная информация для разработки -->
+    {% if debug %}
+    <script>
+        console.log('Base template loaded');
+        console.log('Themes.js loaded:', typeof window.mdAnimations !== 'undefined');
+        console.log('Main.js loaded:', typeof window.mdFileUploader !== 'undefined');
+        console.log('Copy functions available:', typeof copyToClipboard !== 'undefined');
+    </script>
+    {% endif %}
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

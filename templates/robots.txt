@@ -1,0 +1,25 @@
+User-agent: *
+Allow: /
+
+# Разрешаем индексацию основных страниц
+Allow: /$
+Allow: /files/recent/
+Allow: /files/search/
+
+# Запрещаем индексацию служебных страниц
+Disallow: /admin/
+Disallow: /files/download/
+Disallow: /files/delete/
+Disallow: /files/edit/
+Disallow: /media/
+Disallow: /static/admin/
+Disallow: /static/rest_framework/
+
+# Запрещаем индексацию файлов с паролями
+Disallow: /files/*/password/
+
+# Sitemap
+Sitemap: https://{{ domain }}/sitemap.xml
+
+# Crawl-delay для уважительного отношения к серверу
+Crawl-delay: 1
