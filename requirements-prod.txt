@@ -1,0 +1,35 @@
+# Production requirements for 0123.ru file hosting
+# Core Django
+Django>=5.2,<5.3
+django-crispy-forms>=2.1
+django-ratelimit>=4.1.0
+
+# Database
+psycopg2-binary>=2.9.9  # PostgreSQL adapter
+
+# WSGI Server
+gunicorn>=21.2.0
+
+# QR Code generation
+qrcode[pil]>=7.4.2
+Pillow>=10.1.0
+
+# Security and monitoring
+django-cors-headers>=4.3.1
+django-honeypot>=1.0.2
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Static files
+whitenoise>=6.6.0
+
+# Logging and monitoring
+sentry-sdk[django]>=1.40.0
+
+# Performance
+django-redis>=5.4.0
+redis>=5.0.1
+
+# File handling
+python-magic>=0.4.27  # Better file type detection

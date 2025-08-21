@@ -1,0 +1,41 @@
+[Unit]
+Description=0123.ru File Hosting Django Application
+After=network.target postgresql.service redis.service
+Wants=postgresql.service redis.service
+
+[Service]
+Type=notify
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/filehost
+Environment="PATH=/var/www/filehost/venv/bin"
+Environment="DJANGO_SETTINGS_MODULE=filehost.settings_prod"
+Environment="PYTHONPATH=/var/www/filehost"
+ExecStart=/var/www/filehost/venv/bin/gunicorn --config gunicorn.conf.py filehost.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=always
+RestartSec=3
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/filehost/media /var/www/filehost/logs /var/www/filehost/staticfiles
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=filehost
+
+[Install]
+WantedBy=multi-user.target
