@@ -103,6 +103,95 @@ class File(models.Model):
         self.last_downloaded = timezone.now()
         self.save(update_fields=['download_count', 'last_downloaded'])
     
+    def get_file_type(self):
+        """Определяет тип файла на основе расширения"""
+        import mimetypes
+        
+        # Получаем расширение файла
+        _, ext = os.path.splitext(self.filename.lower())
+        
+        # Определяем MIME тип
+        mime_type, _ = mimetypes.guess_type(self.filename)
+        
+        # Категории файлов
+        if ext in ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico']:
+            return 'image'
+        elif ext in ['.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm', '.mkv', '.m4v']:
+            return 'video'
+        elif ext in ['.mp3', '.wav', '.flac', '.aac', '.ogg', '.wma', '.m4a']:
+            return 'audio'
+        elif ext in ['.pdf', '.doc', '.docx', '.txt', '.rtf', '.odt']:
+            return 'document'
+        elif ext in ['.xls', '.xlsx', '.csv', '.ods']:
+            return 'spreadsheet'
+        elif ext in ['.ppt', '.pptx', '.odp']:
+            return 'presentation'
+        elif ext in ['.zip', '.rar', '.7z', '.tar', '.gz', '.bz2']:
+            return 'archive'
+        elif ext in ['.py', '.js', '.html', '.css', '.php', '.java', '.cpp', '.c', '.h']:
+            return 'code'
+        elif ext in ['.exe', '.msi', '.dmg', '.pkg', '.deb', '.rpm']:
+            return 'executable'
+        else:
+            return 'other'
+    
+    def get_file_type_icon(self):
+        """Возвращает иконку FontAwesome для типа файла"""
+        file_type = self.get_file_type()
+        
+        icon_map = {
+            'image': 'fas fa-image',
+            'video': 'fas fa-video',
+            'audio': 'fas fa-music',
+            'document': 'fas fa-file-alt',
+            'spreadsheet': 'fas fa-file-excel',
+            'presentation': 'fas fa-file-powerpoint',
+            'archive': 'fas fa-file-archive',
+            'code': 'fas fa-file-code',
+            'executable': 'fas fa-cog',
+            'other': 'fas fa-file'
+        }
+        
+        return icon_map.get(file_type, 'fas fa-file')
+    
+    def get_file_type_name(self):
+        """Возвращает человекочитаемое название типа файла"""
+        file_type = self.get_file_type()
+        
+        name_map = {
+            'image': 'Изображение',
+            'video': 'Видео',
+            'audio': 'Аудио',
+            'document': 'Документ',
+            'spreadsheet': 'Таблица',
+            'presentation': 'Презентация',
+            'archive': 'Архив',
+            'code': 'Код',
+            'executable': 'Программа',
+            'other': 'Файл'
+        }
+        
+        return name_map.get(file_type, 'Файл')
+    
+    def get_file_type_color(self):
+        """Возвращает цвет для типа файла (Bootstrap классы)"""
+        file_type = self.get_file_type()
+        
+        color_map = {
+            'image': 'text-info',
+            'video': 'text-danger',
+            'audio': 'text-warning',
+            'document': 'text-primary',
+            'spreadsheet': 'text-success',
+            'presentation': 'text-warning',
+            'archive': 'text-secondary',
+            'code': 'text-dark',
+            'executable': 'text-danger',
+            'other': 'text-muted'
+        }
+        
+        return color_map.get(file_type, 'text-muted')
+    
     def get_remaining_time(self):
         """Возвращает оставшееся время жизни файла"""
         if self.is_expired():

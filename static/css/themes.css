@@ -26,6 +26,7 @@
   --md-on-background: #212121;
   
   /* Дополнительные цвета для лучшего контраста */
+  --md-outline: #e0e0e0; /* Цвет границ для светлой темы */
   --md-form-border: #e0e0e0;
   --md-form-border-focus: #1976d2;
   --md-form-background: #ffffff;
@@ -47,6 +48,9 @@
   --md-elevation-3: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   --md-elevation-4: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   --md-elevation-5: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  --md-elevation-6: 0 24px 48px rgba(0,0,0,0.35), 0 20px 16px rgba(0,0,0,0.20);
+  --md-elevation-7: 0 29px 58px rgba(0,0,0,0.40), 0 25px 20px rgba(0,0,0,0.18);
+  --md-elevation-8: 0 34px 68px rgba(0,0,0,0.45), 0 30px 24px rgba(0,0,0,0.16);
   
   /* Material Design радиусы */
   --md-radius-small: 4px;
@@ -104,6 +108,7 @@
   --md-on-background: #ffffff;
   
   /* Дополнительные цвета для лучшего контраста в темной теме */
+  --md-outline: #424242; /* Цвет границ для темной темы */
   --md-form-border: #424242;
   --md-form-border-focus: #90caf9;
   --md-form-background: #1e1e1e;
@@ -125,6 +130,9 @@
   --md-elevation-3: 0 10px 20px rgba(255,255,255,0.19), 0 6px 6px rgba(255,255,255,0.23);
   --md-elevation-4: 0 14px 28px rgba(255,255,255,0.25), 0 10px 10px rgba(255,255,255,0.22);
   --md-elevation-5: 0 19px 38px rgba(255,255,255,0.30), 0 15px 12px rgba(255,255,255,0.22);
+  --md-elevation-6: 0 24px 48px rgba(255,255,255,0.35), 0 20px 16px rgba(255,255,255,0.20);
+  --md-elevation-7: 0 29px 58px rgba(255,255,255,0.40), 0 25px 20px rgba(255,255,255,0.18);
+  --md-elevation-8: 0 34px 68px rgba(255,255,255,0.45), 0 30px 24px rgba(255,255,255,0.16);
 }
 
 /* Базовые Material Design стили */

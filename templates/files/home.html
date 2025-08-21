@@ -114,13 +114,6 @@
                     
 
                     
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="generateQR" name="generate_qr" checked>
-                        <label class="form-check-label" for="generateQR">
-                            Генерировать QR-код для быстрого доступа
-                        </label>
-                    </div>
-                    
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary btn-lg">
                             <i class="fas fa-upload"></i>
@@ -178,11 +171,15 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
                         <div class="file-icon">
-                            <i class="fas fa-file"></i>
+                            <i class="{{ file.get_file_type_icon }} {{ file.get_file_type_color }}"></i>
                         </div>
                         <div class="ms-3 flex-grow-1">
                             <h6 class="mb-1">{{ file.filename }}</h6>
                             <small class="text-muted">{{ file.created_at|timesince }} назад</small>
+                            <br>
+                            <small class="badge {{ file.get_file_type_color }} bg-light">
+                                {{ file.get_file_type_name }}
+                            </small>
                         </div>
                         {% if file.is_protected %}
                         <span class="badge bg-warning" title="Файл защищен паролем">
@@ -265,50 +262,126 @@
 {% block extra_js %}
 <!-- Upload Success Modal -->
 <div class="modal fade" id="uploadSuccessModal" tabindex="-1" aria-labelledby="uploadSuccessModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="uploadSuccessModalLabel">
-                    <i class="fas fa-check-circle text-success me-2"></i>
-                    Файл загружен!
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="text-center mb-4">
-                    <div class="upload-success-icon">
-                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <!-- Header с градиентом -->
+            <div class="modal-header bg-gradient-success text-white border-0 py-4">
+                <div class="d-flex align-items-center w-100">
+                    <div class="success-icon-large me-3">
+                        <i class="fas fa-check-circle"></i>
                     </div>
-                </div>
-                
-                <div class="upload-success-details">
-                    <div class="detail-item">
-                        <small class="text-muted">Имя файла:</small>
-                        <div class="fw-bold" id="modalFileName"></div>
+                    <div class="flex-grow-1">
+                        <h4 class="modal-title mb-1" id="uploadSuccessModalLabel">
+                            Файл успешно загружен!
+                        </h4>
+                        <p class="mb-0 opacity-75">Ваш файл готов к использованию</p>
                     </div>
-                    <div class="detail-item">
-                        <small class="text-muted">Код файла:</small>
-                        <div class="fw-bold" id="modalFileCode"></div>
-                    </div>
-                    <div class="detail-item">
-                        <small class="text-muted">Размер:</small>
-                        <div class="fw-bold" id="modalFileSize"></div>
-                    </div>
-                    <div class="detail-item">
-                        <small class="text-muted">Истекает:</small>
-                        <div class="fw-bold" id="modalFileExpiry"></div>
-                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary" id="uploadAnotherBtn">
-                    <i class="fas fa-plus"></i>
-                    Загрузить еще
-                </button>
-                <button type="button" class="btn btn-primary" id="goToFileBtn">
-                    <i class="fas fa-external-link-alt"></i>
-                    Перейти к файлу
-                </button>
+            
+            <div class="modal-body p-4">
+                <!-- Основная информация о файле -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <!-- Иконка типа файла -->
+                        <div class="text-center mb-4" id="modalFileTypeIcon" style="display: none;">
+                            <div class="file-type-display">
+                                <i class="fas fa-file fa-4x text-primary mb-3"></i>
+                                <div class="file-type-badge" id="modalFileTypeBadge"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Детали файла -->
+                        <div class="file-details-grid">
+                            <div class="detail-card">
+                                <div class="detail-icon bg-primary">
+                                    <i class="fas fa-file-alt text-white"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <div class="detail-label">Имя файла</div>
+                                    <div class="detail-value fw-bold" id="modalFileName"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <div class="detail-icon bg-success">
+                                    <i class="fas fa-hashtag text-white"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <div class="detail-label">Код файла</div>
+                                    <div class="detail-value fw-bold text-success" id="modalFileCode"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <div class="detail-icon bg-info">
+                                    <i class="fas fa-weight-hanging text-white"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <div class="detail-label">Размер</div>
+                                    <div class="detail-value fw-bold" id="modalFileSize"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-card">
+                                <div class="detail-icon bg-warning">
+                                    <i class="fas fa-clock text-white"></i>
+                                </div>
+                                <div class="detail-content">
+                                    <div class="detail-label">Истекает</div>
+                                    <div class="detail-value fw-bold" id="modalFileExpiry"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <!-- QR код -->
+                        <div class="qr-section text-center">
+                            <h6 class="mb-3 text-muted">
+                                <i class="fas fa-qrcode me-2"></i>
+                                QR код
+                            </h6>
+                            <div class="qr-placeholder p-3 border rounded bg-light">
+                                <i class="fas fa-qrcode fa-2x text-muted mb-2"></i>
+                                <p class="small text-muted mb-0">QR код генерируется...</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Быстрые действия -->
+                        <div class="quick-actions mt-4">
+                            <h6 class="mb-3 text-muted">
+                                <i class="fas fa-bolt me-2"></i>
+                                Быстрые действия
+                            </h6>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-primary btn-sm" id="copyLinkBtn">
+                                    <i class="fas fa-link me-2"></i>
+                                    Копировать ссылку
+                                </button>
+                                <button class="btn btn-outline-success btn-sm" id="downloadBtn">
+                                    <i class="fas fa-download me-2"></i>
+                                    Скачать файл
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer с кнопками -->
+            <div class="modal-footer border-0 bg-light py-3">
+                <div class="d-flex justify-content-between w-100">
+                    <button type="button" class="btn btn-outline-secondary" id="uploadAnotherBtn">
+                        <i class="fas fa-plus me-2"></i>
+                        Загрузить еще файл
+                    </button>
+                    <button type="button" class="btn btn-primary" id="goToFileBtn">
+                        <i class="fas fa-external-link-alt me-2"></i>
+                        Перейти к файлу
+                    </button>
+                </div>
             </div>
         </div>
     </div>

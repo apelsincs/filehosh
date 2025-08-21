@@ -1535,4 +1535,284 @@ body {
   font-size: 16px;
   font-weight: 500;
   color: var(--md-on-surface);
+}
+
+/* Стили для анимации копирования ссылок */
+.copy-link-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all var(--md-transition-medium);
+}
+
+.copy-link-btn.copying {
+  background-color: var(--md-primary) !important;
+  color: var(--md-on-primary) !important;
+  transform: scale(0.95);
+}
+
+.copy-link-btn.copying::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  font-weight: bold;
+  animation: copySuccess 0.6s ease-in-out;
+}
+
+@keyframes copySuccess {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Улучшенные стили для кнопок копирования */
+.copy-link-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--md-elevation-4);
+}
+
+.copy-link-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--md-elevation-2);
+}
+
+/* Стили для уведомлений */
+.notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  max-width: 400px;
+}
+
+.notification {
+  background: var(--md-surface);
+  border: 1px solid var(--md-outline);
+  border-radius: 12px;
+  box-shadow: var(--md-elevation-8);
+  margin-bottom: 12px;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.3s ease;
+  color: var(--md-on-surface); /* Используем переменную для цвета текста */
+}
+
+.notification.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  gap: 12px;
+  color: var(--md-on-surface); /* Явно указываем цвет текста */
+}
+
+.notification span {
+  color: var(--md-on-surface); /* Цвет для текста уведомления */
+  flex-grow: 1;
+}
+
+.notification i {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.notification-success i {
+  color: var(--md-success);
+}
+
+.notification-error i {
+  color: var(--md-error);
+}
+
+.notification-warning i {
+  color: var(--md-warning);
+}
+
+.notification-info i {
+  color: var(--md-primary);
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: var(--md-on-surface-variant);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  margin-left: auto;
+  transition: all 0.2s ease;
+}
+
+.notification-close:hover {
+  background: var(--md-surface-variant);
+  color: var(--md-on-surface);
+}
+
+/* Стили для модального окна успешной загрузки */
+.bg-gradient-success {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.success-icon-large {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.file-type-display {
+  position: relative;
+  display: inline-block;
+}
+
+.file-type-badge {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--md-primary);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.file-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.file-details-grid .detail-card {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: var(--md-surface-variant);
+  border-radius: 12px;
+  transition: all var(--md-transition-medium);
+  border: 1px solid transparent;
+}
+
+.file-details-grid .detail-card:hover {
+  background: var(--md-surface);
+  transform: translateY(-2px);
+  box-shadow: var(--md-elevation-2);
+  border-color: var(--md-outline);
+}
+
+.file-details-grid .detail-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.file-details-grid .detail-content {
+  flex-grow: 1;
+}
+
+.file-details-grid .detail-label {
+  font-size: 12px;
+  color: var(--md-on-surface-variant);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.file-details-grid .detail-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--md-on-surface);
+  word-break: break-word;
+}
+
+.qr-section {
+  background: var(--md-surface-variant);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--md-outline);
+}
+
+.qr-placeholder {
+  background: var(--md-surface);
+  border: 2px dashed var(--md-outline);
+  border-radius: 8px;
+  transition: all var(--md-transition-medium);
+}
+
+.qr-placeholder:hover {
+  border-color: var(--md-primary);
+  background: var(--md-surface-variant);
+}
+
+.quick-actions {
+  background: var(--md-surface-variant);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--md-outline);
+}
+
+.quick-actions .btn {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all var(--md-transition-medium);
+}
+
+.quick-actions .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--md-elevation-2);
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .file-details-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-dialog {
+    margin: 10px;
+  }
+  
+  .success-icon-large {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+  
+  .file-details-grid .detail-card {
+    padding: 12px;
+  }
+  
+  .file-details-grid .detail-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
 } 

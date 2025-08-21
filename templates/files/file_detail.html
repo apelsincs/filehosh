@@ -11,11 +11,11 @@
                 <div class="card-header bg-gradient-primary text-white text-center py-4">
                     <div class="d-flex align-items-center justify-content-center">
                         <div class="file-icon-large me-3">
-                            <i class="fas fa-file-alt"></i>
+                            <i class="{{ file.get_file_type_icon }}"></i>
                         </div>
                         <div>
                             <h3 class="mb-1">{{ file.filename }}</h3>
-                            <p class="mb-0 opacity-75">Информация о файле</p>
+                            <p class="mb-0 opacity-75">{{ file.get_file_type_name }}</p>
                         </div>
                     </div>
                 </div>
@@ -31,6 +31,16 @@
                                     <div class="detail-content">
                                         <div class="detail-label">Код файла</div>
                                         <div class="detail-value fw-bold text-primary">{{ file.code }}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-card">
+                                    <div class="detail-icon">
+                                        <i class="{{ file.get_file_type_icon }}"></i>
+                                    </div>
+                                    <div class="detail-content">
+                                        <div class="detail-label">Тип файла</div>
+                                        <div class="detail-value {{ file.get_file_type_color }}">{{ file.get_file_type_name }}</div>
                                     </div>
                                 </div>
                                 
@@ -119,7 +129,7 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <button class="btn btn-outline-info btn-lg w-100 copy-link-btn" 
-                                             data-url="{{ file_url }}" onclick="copyToClipboard('{{ file_url }}')">
+                                             data-url="{{ file_url }}">
                                             <i class="fas fa-link me-2"></i>
                                             Копировать ссылку
                                         </button>
@@ -155,7 +165,7 @@
                                             Скачать QR код
                                         </button>
                                         <button class="btn btn-sm btn-outline-secondary copy-link-btn" type="button"
-                                                data-url="{{ file_url }}" onclick="copyToClipboard('{{ file_url }}')">
+                                                data-url="{{ file_url }}">
                                             <i class="fas fa-share me-1"></i>
                                             Поделиться
                                         </button>
@@ -185,7 +195,7 @@
                         <input type="text" class="form-control" value="{{ file_url }}" 
                                id="fileUrl" readonly>
                         <button class="btn btn-outline-primary copy-link-btn" type="button" 
-                                 data-url="{{ file_url }}" onclick="copyToClipboard('{{ file_url }}')">
+                                 data-url="{{ file_url }}">
                             <i class="fas fa-copy"></i>
                         </button>
                     </div>
@@ -214,22 +224,117 @@
                     </p>
                 </div>
             </div>
+            
+            <!-- Тестовая секция для отладки -->
+            <div class="card shadow-sm border-0 mt-3" style="display: none;" id="debug-card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bug me-2"></i>
+                        Отладка
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-sm btn-warning" onclick="alert('JavaScript работает!')">
+                        🧪 Тест JavaScript
+                    </button>
+                    <button class="btn btn-sm btn-info" onclick="console.log('Кнопки копирования:', document.querySelectorAll('.copy-link-btn').length)">
+                        🔍 Проверить кнопки
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Отладочная информация (убрать в продакшене) -->
-{% if debug %}
-<div class="container mt-3">
-    <div class="alert alert-info">
-        <strong>Отладка:</strong> file_url = {{ file_url }}
-    </div>
-</div>
-{% endif %}
 {% endblock %}
 
 {% block extra_js %}
 <script>
+// Простая инициализация кнопок копирования
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM загружен, инициализируем кнопки копирования...');
+    
+    const copyButtons = document.querySelectorAll('.copy-link-btn');
+    console.log('Найдено кнопок копирования:', copyButtons.length);
+    
+    copyButtons.forEach((button, index) => {
+        const url = button.getAttribute('data-url');
+        console.log(`Кнопка ${index + 1}:`, url);
+        
+        // Добавляем обработчик клика
+        button.addEventListener('click', (e) => {
+            console.log(`Кнопка ${index + 1} нажата!`);
+            console.log('URL для копирования:', url);
+            
+            if (url && url.trim() !== '') {
+                // Пробуем основную функцию
+                if (typeof copyToClipboard === 'function') {
+                    console.log('Используем copyToClipboard');
+                    copyToClipboard(url, button);
+                } else {
+                    console.log('copyToClipboard недоступна, используем fallback');
+                    // Fallback копирование
+                    if (navigator.clipboard && window.isSecureContext) {
+                        navigator.clipboard.writeText(url).then(() => {
+                            console.log('Скопировано через Clipboard API');
+                            alert('Ссылка скопирована в буфер обмена!');
+                        }).catch((error) => {
+                            console.error('Ошибка Clipboard API:', error);
+                            alert('Ошибка копирования: ' + error.message);
+                        });
+                    } else {
+                        console.log('Используем execCommand fallback');
+                        // Fallback для старых браузеров
+                        const textArea = document.createElement('textarea');
+                        textArea.value = url;
+                        textArea.style.position = 'fixed';
+                        textArea.style.left = '-999999px';
+                        textArea.style.top = '-999999px';
+                        document.body.appendChild(textArea);
+                        textArea.focus();
+                        textArea.select();
+                        
+                        try {
+                            const successful = document.execCommand('copy');
+                            if (successful) {
+                                console.log('Скопировано через execCommand');
+                                alert('Ссылка скопирована в буфер обмена!');
+                            } else {
+                                console.error('execCommand не сработал');
+                                alert('Не удалось скопировать ссылку');
+                            }
+                        } catch (err) {
+                            console.error('Ошибка execCommand:', err);
+                            alert('Ошибка копирования: ' + err.message);
+                        }
+                        
+                        document.body.removeChild(textArea);
+                    }
+                }
+            } else {
+                console.error('URL пустой или не найден');
+                alert('Ошибка: ссылка не найдена');
+            }
+        });
+    });
+    
+    // Проверяем глобальные функции
+    console.log('copyToClipboard доступна:', typeof copyToClipboard !== 'undefined');
+    console.log('showNotification доступна:', typeof showNotification !== 'undefined');
+    console.log('setupGlobalCopyButtons доступна:', typeof setupGlobalCopyButtons !== 'undefined');
+});
+
+// Показать/скрыть отладочную секцию по нажатию Ctrl+Shift+D
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        const debugCard = document.getElementById('debug-card');
+        if (debugCard) {
+            debugCard.style.display = debugCard.style.display === 'none' ? 'block' : 'none';
+        }
+    }
+});
+
 // Live update remaining time progress
 document.addEventListener('DOMContentLoaded', () => {
     const progress = document.getElementById('time-remaining-progress');
@@ -255,9 +360,5 @@ document.addEventListener('DOMContentLoaded', () => {
     update();
     setInterval(update, 60000);
 });
-
-// Проверяем, что функции копирования доступны
-console.log('copyToClipboard function available:', typeof copyToClipboard !== 'undefined');
-console.log('file_url from template:', '{{ file_url }}');
 </script>
 {% endblock %} 

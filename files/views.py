@@ -104,6 +104,9 @@ def home(request):
                     'filename': file_instance.filename,
                     'session_id': file_instance.session_id,
                     'is_protected': file_instance.is_protected,
+                    'file_type': file_instance.get_file_type(),
+                    'file_type_name': file_instance.get_file_type_name(),
+                    'file_type_icon': file_instance.get_file_type_icon(),
                     'debug_info': {
                         'custom_code_provided': bool(custom_code),
                         'password_provided': bool(password),
@@ -126,7 +129,7 @@ def home(request):
             session_id=request.anonymous_session_id,
             expires_at__gt=timezone.now(),
             is_deleted=False
-        ).order_by('-created_at')[:5]
+        ).order_by('-created_at')[:3]
     else:
         # Если session_id нет, показываем пустой список
         recent_files = []

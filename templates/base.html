@@ -130,16 +130,6 @@
     <script src="{% static 'js/themes.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     
-    <!-- Отладочная информация для разработки -->
-    {% if debug %}
-    <script>
-        console.log('Base template loaded');
-        console.log('Themes.js loaded:', typeof window.mdAnimations !== 'undefined');
-        console.log('Main.js loaded:', typeof window.mdFileUploader !== 'undefined');
-        console.log('Copy functions available:', typeof copyToClipboard !== 'undefined');
-    </script>
-    {% endif %}
-    
     {% block extra_js %}{% endblock %}
 </body>
 </html> 

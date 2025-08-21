@@ -256,6 +256,8 @@ class MaterialFileUploader {
         const fileCode = document.getElementById('modalFileCode');
         const fileSize = document.getElementById('modalFileSize');
         const fileExpiry = document.getElementById('modalFileExpiry');
+        const fileTypeIcon = document.getElementById('modalFileTypeIcon');
+        const fileTypeBadge = document.getElementById('modalFileTypeBadge');
         
         // Заполняем информацию о файле
         if (fileName && result.filename) {
@@ -283,6 +285,21 @@ class MaterialFileUploader {
             fileExpiry.textContent = formattedExpiry;
         }
         
+        // Показываем иконку типа файла
+        if (fileTypeIcon && result.file_type_icon && result.file_type_name) {
+            const iconElement = fileTypeIcon.querySelector('i');
+            if (iconElement) {
+                iconElement.className = result.file_type_icon + ' fa-4x text-primary mb-3';
+            }
+            
+            // Показываем бейдж с названием типа файла
+            if (fileTypeBadge) {
+                fileTypeBadge.textContent = result.file_type_name;
+            }
+            
+            fileTypeIcon.style.display = 'block';
+        }
+        
         this.lastUploadedFileUrl = result.url;
         
         const modalInstance = new bootstrap.Modal(modal);
@@ -299,6 +316,8 @@ class MaterialFileUploader {
     setupModalHandlers() {
         const goToFileBtn = document.getElementById('goToFileBtn');
         const uploadAnotherBtn = document.getElementById('uploadAnotherBtn');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
         const modal = document.getElementById('uploadSuccessModal');
         
         if (goToFileBtn) {
@@ -317,7 +336,66 @@ class MaterialFileUploader {
                 const modalInstance = bootstrap.Modal.getInstance(modal);
                 modalInstance.hide();
                 
-                this.resetUploadForm();
+                // Небольшая задержка для плавного закрытия модального окна
+                setTimeout(() => {
+                    // Перезагружаем главную страницу для обновления списка файлов
+                    window.location.reload();
+                }, 300);
+            };
+        }
+        
+        // Кнопка копирования ссылки
+        if (copyLinkBtn) {
+            copyLinkBtn.onclick = () => {
+                if (this.lastUploadedFileUrl) {
+                    if (typeof copyToClipboard === 'function') {
+                        copyToClipboard(this.lastUploadedFileUrl, copyLinkBtn);
+                    } else {
+                        // Fallback копирование
+                        if (navigator.clipboard && window.isSecureContext) {
+                            navigator.clipboard.writeText(this.lastUploadedFileUrl).then(() => {
+                                this.showNotification('Ссылка скопирована в буфер обмена!', 'success');
+                            }).catch(() => {
+                                this.showNotification('Не удалось скопировать ссылку', 'error');
+                            });
+                        } else {
+                            // Fallback для старых браузеров
+                            const textArea = document.createElement('textarea');
+                            textArea.value = this.lastUploadedFileUrl;
+                            textArea.style.position = 'fixed';
+                            textArea.style.left = '-999999px';
+                            textArea.style.top = '-999999px';
+                            document.body.appendChild(textArea);
+                            textArea.focus();
+                            textArea.select();
+                            
+                            try {
+                                document.execCommand('copy');
+                                this.showNotification('Ссылка скопирована в буфер обмена!', 'success');
+                            } catch (err) {
+                                this.showNotification('Не удалось скопировать ссылку', 'error');
+                            }
+                            
+                            document.body.removeChild(textArea);
+                        }
+                    }
+                }
+            };
+        }
+        
+        // Кнопка скачивания файла
+        if (downloadBtn) {
+            downloadBtn.onclick = () => {
+                if (this.lastUploadedFileUrl) {
+                    // Извлекаем код файла из URL
+                    const urlParts = this.lastUploadedFileUrl.split('/');
+                    const fileCode = urlParts[urlParts.length - 2]; // Предпоследний элемент
+                    
+                    if (fileCode) {
+                        const downloadUrl = `${window.location.origin}/files/${fileCode}/download/`;
+                        window.open(downloadUrl, '_blank');
+                    }
+                }
             };
         }
     }
@@ -920,6 +998,16 @@ class AnonymousSessionManager {
 
 // Глобальная функция для копирования в буфер обмена
 function copyToClipboard(text, button = null) {
+    // Проверяем, что текст не пустой
+    if (!text || text.trim() === '') {
+        if (typeof showNotification === 'function') {
+            showNotification('Ошибка: нечего копировать', 'error');
+        } else {
+            alert('Ошибка: нечего копировать');
+        }
+        return;
+    }
+    
     // Показываем анимацию на кнопке, если она передана
     if (button) {
         button.classList.add('copying');
@@ -931,9 +1019,12 @@ function copyToClipboard(text, button = null) {
     if (navigator.clipboard && window.isSecureContext) {
         // Используем современный Clipboard API
         navigator.clipboard.writeText(text).then(() => {
-            showNotification('Ссылка скопирована в буфер обмена!', 'success');
+            if (typeof showNotification === 'function') {
+                showNotification('Ссылка скопирована в буфер обмена!', 'success');
+            } else {
+                alert('Ссылка скопирована в буфер обмена!');
+            }
         }).catch((error) => {
-            console.warn('Clipboard API failed, using fallback:', error);
             fallbackCopyToClipboard(text, button);
         });
     } else {
@@ -950,6 +1041,7 @@ function fallbackCopyToClipboard(text, button = null) {
     textArea.style.left = '-999999px';
     textArea.style.top = '-999999px';
     textArea.style.opacity = '0';
+    textArea.style.pointerEvents = 'none';
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
@@ -957,13 +1049,24 @@ function fallbackCopyToClipboard(text, button = null) {
     try {
         const successful = document.execCommand('copy');
         if (successful) {
-            showNotification('Ссылка скопирована в буфер обмена!', 'success');
+            if (typeof showNotification === 'function') {
+                showNotification('Ссылка скопирована в буфер обмена!', 'success');
+            } else {
+                alert('Ссылка скопирована в буфер обмена!');
+            }
         } else {
-            showNotification('Не удалось скопировать ссылку', 'error');
+            if (typeof showNotification === 'function') {
+                showNotification('Не удалось скопировать ссылку', 'error');
+            } else {
+                alert('Не удалось скопировать ссылку');
+            }
         }
     } catch (err) {
-        console.error('Fallback copy failed:', err);
-        showNotification('Не удалось скопировать ссылку', 'error');
+        if (typeof showNotification === 'function') {
+            showNotification('Не удалось скопировать ссылку', 'error');
+        } else {
+            alert('Не удалось скопировать ссылку');
+        }
     }
     
     document.body.removeChild(textArea);
@@ -1051,22 +1154,95 @@ window.downloadQRCode = downloadQRCode;
 
 // Глобальная функция для инициализации кнопок копирования на всех страницах
 function setupGlobalCopyButtons() {
+    console.log('setupGlobalCopyButtons: инициализация...');
+    
     // Находим все кнопки копирования ссылок
     document.addEventListener('click', (e) => {
         if (e.target.closest('.copy-link-btn')) {
+            console.log('Кнопка копирования нажата!');
             const button = e.target.closest('.copy-link-btn');
             const url = button.getAttribute('data-url');
-            if (url) {
-                copyToClipboard(url, button);
+            console.log('URL для копирования:', url);
+            
+            if (url && url.trim() !== '') {
+                if (typeof copyToClipboard === 'function') {
+                    console.log('Используем основную функцию copyToClipboard');
+                    copyToClipboard(url, button);
+                } else {
+                    console.log('Основная функция недоступна, используем fallback');
+                    // Fallback если основная функция недоступна
+                    if (navigator.clipboard && window.isSecureContext) {
+                        navigator.clipboard.writeText(url).then(() => {
+                            if (typeof showNotification === 'function') {
+                                showNotification('Ссылка скопирована в буфер обмена!', 'success');
+                            } else {
+                                alert('Ссылка скопирована в буфер обмена!');
+                            }
+                        }).catch(() => {
+                            if (typeof showNotification === 'function') {
+                                showNotification('Не удалось скопировать ссылку', 'error');
+                            } else {
+                                alert('Не удалось скопировать ссылку');
+                            }
+                        });
+                    } else {
+                        // Fallback для старых браузеров
+                        const textArea = document.createElement('textarea');
+                        textArea.value = url;
+                        textArea.style.position = 'fixed';
+                        textArea.style.left = '-999999px';
+                        textArea.style.top = '-999999px';
+                        document.body.appendChild(textArea);
+                        textArea.focus();
+                        textArea.select();
+                        
+                        try {
+                            document.execCommand('copy');
+                            if (typeof showNotification === 'function') {
+                                showNotification('Ссылка скопирована в буфер обмена!', 'success');
+                            } else {
+                                alert('Ссылка скопирована в буфер обмена!');
+                            }
+                        } catch (err) {
+                            if (typeof showNotification === 'function') {
+                                showNotification('Не удалось скопировать ссылку', 'error');
+                            } else {
+                                alert('Не удалось скопировать ссылку');
+                            }
+                        }
+                        
+                        document.body.removeChild(textArea);
+                    }
+                }
             } else {
-                console.warn('Button missing data-url attribute:', button);
-                showNotification('Ошибка: ссылка не найдена', 'error');
+                console.error('URL пустой или не найден');
+                if (typeof showNotification === 'function') {
+                    showNotification('Ошибка: ссылка не найдена', 'error');
+                } else {
+                    alert('Ошибка: ссылка не найдена');
+                }
             }
         }
     });
+    
+    // Проверяем, что кнопки найдены при инициализации
+    const copyButtons = document.querySelectorAll('.copy-link-btn');
+    if (copyButtons.length > 0) {
+        console.log(`setupGlobalCopyButtons: найдено ${copyButtons.length} кнопок копирования`);
+    } else {
+        console.log('setupGlobalCopyButtons: кнопки копирования не найдены');
+    }
 }
 
 // Экспорт для использования в других модулях
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { MaterialFileUploader, MaterialAnimations, AnonymousSessionManager };
-} 
+}
+
+// Делаем функции доступными глобально
+window.copyToClipboard = copyToClipboard;
+window.fallbackCopyToClipboard = fallbackCopyToClipboard;
+window.showNotification = showNotification;
+window.getNotificationIcon = getNotificationIcon;
+window.downloadQRCode = downloadQRCode;
+window.setupGlobalCopyButtons = setupGlobalCopyButtons; 
