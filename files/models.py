@@ -46,10 +46,16 @@ class File(models.Model):
         verbose_name = 'Файл'
         verbose_name_plural = 'Файлы'
         ordering = ['-created_at']
-        # Индекс для быстрого поиска файлов по сессии
+        # Индексы для оптимизации запросов
         indexes = [
             models.Index(fields=['session_id', 'created_at']),
             models.Index(fields=['session_id', 'expires_at']),
+            models.Index(fields=['code']),  # Для быстрого поиска по коду
+            models.Index(fields=['is_deleted', 'expires_at']),  # Для очистки истекших файлов
+            models.Index(fields=['download_count']),  # Для популярных файлов
+            models.Index(fields=['created_at']),  # Для сортировки по дате
+            models.Index(fields=['file_size']),  # Для фильтрации по размеру
+            models.Index(fields=['is_protected']),  # Для защищенных файлов
         ]
     
     def __str__(self):

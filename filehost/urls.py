@@ -18,14 +18,23 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from files.views import robots_txt, sitemap_xml
+from files.views import robots_txt, sitemap_xml, error_400, error_403, error_404, error_500
+from django.views.i18n import JavaScriptCatalog
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('files.urls')),
+    path('i18n/', include('django.conf.urls.i18n')),
+    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     path('sitemap.xml', sitemap_xml, name='sitemap'),
     path('robots.txt', robots_txt, name='robots_txt'),
 ]
+
+# Error handlers
+handler400 = 'files.views.error_400'
+handler403 = 'files.views.error_403'
+handler404 = 'files.views.error_404'
+handler500 = 'files.views.error_500'
 
 # Добавляем обработку медиа файлов в режиме разработки
 if settings.DEBUG:

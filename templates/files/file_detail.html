@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block title %}{{ file.filename }} - 0123.ru{% endblock %}
 
@@ -29,7 +30,7 @@
                                         <i class="fas fa-hashtag"></i>
                                     </div>
                                     <div class="detail-content">
-                                        <div class="detail-label">Код файла</div>
+                                        <div class="detail-label">{% trans 'Код файла' %}</div>
                                         <div class="detail-value fw-bold text-primary">{{ file.code }}</div>
                                     </div>
                                 </div>
@@ -39,7 +40,7 @@
                                         <i class="{{ file.get_file_type_icon }}"></i>
                                     </div>
                                     <div class="detail-content">
-                                        <div class="detail-label">Тип файла</div>
+                                        <div class="detail-label">{% trans 'Тип файла' %}</div>
                                         <div class="detail-value {{ file.get_file_type_color }}">{{ file.get_file_type_name }}</div>
                                     </div>
                                 </div>
@@ -49,7 +50,7 @@
                                         <i class="fas fa-weight-hanging"></i>
                                     </div>
                                     <div class="detail-content">
-                                        <div class="detail-label">Размер</div>
+                                        <div class="detail-label">{% trans 'Размер' %}</div>
                                         <div class="detail-value">{{ file.get_file_size_mb }} МБ</div>
                                     </div>
                                 </div>
@@ -59,7 +60,7 @@
                                         <i class="fas fa-clock"></i>
                                     </div>
                                     <div class="detail-content">
-                                        <div class="detail-label">Загружен</div>
+                                        <div class="detail-label">{% trans 'Загружен' %}</div>
                                         <div class="detail-value">{{ file.created_at|date:"d.m.Y H:i" }}</div>
                                     </div>
                                 </div>
@@ -69,7 +70,7 @@
                                         <i class="fas fa-hourglass-half"></i>
                                     </div>
                                     <div class="detail-content">
-                                        <div class="detail-label">Истекает</div>
+                                        <div class="detail-label">{% trans 'Истекает' %}</div>
                                         <div class="detail-value {% if file.is_expired %}text-danger{% endif %}">
                                             {{ file.expires_at|date:"d.m.Y H:i" }}
                                         </div>
@@ -81,7 +82,7 @@
                                         <i class="fas fa-download"></i>
                                     </div>
                                     <div class="detail-content">
-                                        <div class="detail-label">Скачиваний</div>
+                                        <div class="detail-label">{% trans 'Скачиваний' %}</div>
                                         <div class="detail-value">{{ file.download_count }}</div>
                                     </div>
                                 </div>
@@ -91,15 +92,15 @@
                                         <i class="fas fa-shield-alt"></i>
                                     </div>
                                     <div class="detail-content">
-                                        <div class="detail-label">Защита</div>
+                                        <div class="detail-label">{% trans 'Защита' %}</div>
                                         <div class="detail-value">
                                             {% if file.is_protected %}
                                                 <span class="badge bg-warning">
-                                                    <i class="fas fa-lock me-1"></i>Пароль
+                                                    <i class="fas fa-lock me-1"></i>{% trans 'Пароль' %}
                                                 </span>
                                             {% else %}
                                                 <span class="badge bg-success">
-                                                    <i class="fas fa-unlock me-1"></i>Открытый
+                                                    <i class="fas fa-unlock me-1"></i>{% trans 'Открытый' %}
                                                 </span>
                                             {% endif %}
                                         </div>
@@ -114,14 +115,21 @@
                                         <a href="{% url 'files:download_file' file.code %}" 
                                            class="btn btn-primary btn-lg w-100">
                                             <i class="fas fa-download me-2"></i>
-                                            Скачать файл
+                                            {% trans 'Скачать файл' %}
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <a href="{% url 'files:view_file' file.code %}"
+                                           class="btn btn-outline-primary btn-lg w-100">
+                                            <i class="fas fa-eye me-2"></i>
+                                            {% trans 'Просмотр' %}
                                         </a>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <a href="{% url 'files:edit_file' file.code %}" 
                                            class="btn btn-outline-secondary btn-lg w-100">
                                             <i class="fas fa-edit me-2"></i>
-                                            Редактировать
+                                            {% trans 'Редактировать' %}
                                         </a>
                                     </div>
                                 </div>
@@ -131,14 +139,14 @@
                                         <button class="btn btn-outline-info btn-lg w-100 copy-link-btn" 
                                              data-url="{{ file_url }}">
                                             <i class="fas fa-link me-2"></i>
-                                            Копировать ссылку
+                                            {% trans 'Копировать ссылку' %}
                                         </button>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <a href="{% url 'files:delete_file' file.code %}" 
                                            class="btn btn-outline-danger btn-lg w-100">
                                             <i class="fas fa-trash me-2"></i>
-                                            Удалить файл
+                                            {% trans 'Удалить файл' %}
                                         </a>
                                     </div>
                                 </div>
@@ -150,7 +158,7 @@
                             <div class="qr-code-section text-center">
                                 <h5 class="mb-3">
                                     <i class="fas fa-qrcode me-2"></i>
-                                    QR код
+                                    {% trans 'QR код' %}
                                 </h5>
                                 {% if file.qr_code %}
                                     <div class="qr-code-container mb-3">
@@ -162,18 +170,18 @@
                                         <button class="btn btn-sm btn-outline-primary" 
                                                 onclick="window.downloadQRCode(document.querySelector('.qr-code-container img'))">
                                             <i class="fas fa-download me-1"></i>
-                                            Скачать QR код
+                                            {% trans 'Скачать QR код' %}
                                         </button>
                                         <button class="btn btn-sm btn-outline-secondary copy-link-btn" type="button"
                                                 data-url="{{ file_url }}">
                                             <i class="fas fa-share me-1"></i>
-                                            Поделиться
+                                            {% trans 'Поделиться' %}
                                         </button>
                                     </div>
                                 {% else %}
                                     <div class="qr-code-placeholder p-4 border rounded">
                                         <i class="fas fa-qrcode fa-3x text-muted mb-3"></i>
-                                        <p class="text-muted">QR код генерируется...</p>
+                                        <p class="text-muted">{% trans 'QR код генерируется...' %}</p>
                                     </div>
                                 {% endif %}
                             </div>
@@ -187,7 +195,7 @@
                 <div class="card-header bg-light">
                     <h5 class="mb-0">
                         <i class="fas fa-link me-2"></i>
-                        Ссылка на файл
+                        {% trans 'Ссылка на файл' %}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -201,7 +209,7 @@
                     </div>
                     <div class="form-text mt-2">
                         <i class="fas fa-info-circle me-1"></i>
-                        Поделитесь этой ссылкой для доступа к файлу
+                        {% trans 'Поделитесь этой ссылкой для доступа к файлу' %}
                     </div>
                 </div>
             </div>
@@ -211,7 +219,7 @@
                 <div class="card-header bg-light">
                     <h5 class="mb-0">
                         <i class="fas fa-hourglass-half me-2"></i>
-                        Оставшееся время
+                        {% trans 'Оставшееся время' %}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -220,7 +228,7 @@
                     </div>
                     <p class="text-muted mb-0">
                         <i class="fas fa-clock me-1"></i>
-                        Файл будет автоматически удален {{ file.expires_at|date:"d.m.Y в H:i" }}
+                        {% blocktrans with date=file.expires_at|date:"d.m.Y в H:i" %}Файл будет автоматически удален {{ date }}{% endblocktrans %}
                     </p>
                 </div>
             </div>

@@ -1,0 +1,21 @@
+{% load i18n static %}
+{% extends 'base.html' %}
+
+{% block title %}{% trans 'Доступ запрещен (403)' %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4">403</h1>
+            <p class="lead">{% trans 'У вас нет прав для доступа к этой странице.' %}</p>
+            {% if exception %}
+            <p class="text-muted small">{{ exception }}</p>
+            {% endif %}
+            <a class="btn btn-primary mt-3" href="/">{% trans 'Вернуться на главную' %}</a>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+

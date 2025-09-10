@@ -19,11 +19,17 @@ urlpatterns = [
     # Проверка доступности кода
     path('check-code/', views.check_code_availability, name='check_code_availability'),
     
-    # Просмотр файла по коду
-    path('<str:code>/', views.file_detail, name='file_detail'),
+    # Специальный маршрут для прямого просмотра PDF (например, /5711)
+    path('<str:code>/', views.direct_pdf_view, name='direct_pdf_view'),
+    
+    # Просмотр файла по коду (детальная страница)
+    path('<str:code>/detail/', views.file_detail, name='file_detail'),
     
     # Скачивание файла
     path('<str:code>/download/', views.download_file, name='download_file'),
+
+    # Просмотр файла (inline)
+    path('<str:code>/view/', views.view_file, name='view_file'),
     
     # Редактирование файла
     path('<str:code>/edit/', views.edit_file, name='edit_file'),

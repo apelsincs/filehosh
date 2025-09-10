@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}0123.ru - Быстрая передача файлов{% endblock %}
+{% block title %}0123.ru - {% trans 'Быстрая передача файлов' %}{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
 <section class="hero-section">
     <div class="hero-content">
-        <h1 class="hero-title">Быстрая передача файлов</h1>
-        <p class="hero-subtitle">Загружайте файлы мгновенно и делитесь ими безопасно. Автоматическое удаление через 24 часа.</p>
+        <h1 class="hero-title">{% trans 'Быстрая передача файлов' %}</h1>
+        <p class="hero-subtitle">{% trans 'Загружайте файлы мгновенно и делитесь ими безопасно. Автоматическое удаление через 24 часа.' %}</p>
         <div class="hero-actions">
             <a href="#upload" class="btn btn-primary btn-lg">
                 <i class="fas fa-cloud-upload-alt"></i>
-                Загрузить файл
+                {% trans 'Загрузить файл' %}
             </a>
             <a href="{% url 'files:recent_files' %}" class="btn btn-secondary btn-lg">
                 <i class="fas fa-clock"></i>
-                Последние файлы
+                {% trans 'Последние файлы' %}
             </a>
         </div>
     </div>
@@ -25,40 +25,40 @@
 <!-- Features Section -->
 <section class="md-section">
     <div class="md-container">
-                        <h2 class="section-title">Почему 0123.ru?</h2>
-        <p class="section-subtitle">Быстрая передача файлов без регистрации и лишних хлопот</p>
+                        <h2 class="section-title">{% trans 'Почему 0123.ru?' %}</h2>
+        <p class="section-subtitle">{% trans 'Быстрая передача файлов без регистрации и лишних хлопот' %}</p>
         
         <div class="feature-grid">
             <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-bolt"></i>
                 </div>
-                <h3 class="feature-title">Мгновенная загрузка</h3>
-                <p class="feature-description">Загружайте файлы до 25MB за считанные секунды с интуитивно понятным интерфейсом</p>
+                <h3 class="feature-title">{% trans 'Мгновенная загрузка' %}</h3>
+                <p class="feature-description">{% trans 'Загружайте файлы до 25MB за считанные секунды с интуитивно понятным интерфейсом' %}</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-qrcode"></i>
                 </div>
-                <h3 class="feature-title">QR-коды</h3>
-                <p class="feature-description">Генерируйте QR-коды для быстрого доступа к файлам с мобильных устройств</p>
+                <h3 class="feature-title">{% trans 'QR-коды' %}</h3>
+                <p class="feature-description">{% trans 'Генерируйте QR-коды для быстрого доступа к файлам с мобильных устройств' %}</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-shield-alt"></i>
                 </div>
-                <h3 class="feature-title">Безопасность</h3>
-                <p class="feature-description">Защищайте файлы паролем и автоматически удаляйте их через 24 часа</p>
+                <h3 class="feature-title">{% trans 'Безопасность' %}</h3>
+                <p class="feature-description">{% trans 'Защищайте файлы паролем и автоматически удаляйте их через 24 часа' %}</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-mobile-alt"></i>
                 </div>
-                <h3 class="feature-title">Адаптивность</h3>
-                <p class="feature-description">Адаптивный интерфейс, который отлично работает на всех устройствах</p>
+                <h3 class="feature-title">{% trans 'Адаптивность' %}</h3>
+                <p class="feature-description">{% trans 'Адаптивный интерфейс, который отлично работает на всех устройствах' %}</p>
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-cloud-upload-alt"></i>
-                    Загрузка файла
+                    {% trans 'Загрузка файла' %}
                 </h3>
             </div>
             
@@ -83,31 +83,37 @@
                         <div class="upload-icon">
                             <i class="fas fa-cloud-upload-alt"></i>
                         </div>
-                        <div class="upload-text">Перетащите файл сюда или нажмите для выбора</div>
-                        <div class="upload-hint">Максимальный размер: 25MB</div>
+                        <div class="upload-text">{% trans 'Перетащите файл сюда или нажмите для выбора' %}</div>
+                        <div class="upload-hint">{% trans 'Максимальный размер: 25MB' %}</div>
                         <input type="file" id="fileInput" name="file" accept="*/*" style="display: none;">
                     </div>
                     
                     <div class="row mt-4">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="customCode" class="form-label">Кастомный код (необязательно)</label>
+                                <label for="customCode" class="form-label">{% trans 'Кастомный код (необязательно)' %}</label>
                                 <input type="text" class="form-control" id="customCode" name="custom_code" 
-                                       placeholder="Введите желаемый код для файла"
+                                       placeholder="{% trans 'Введите желаемый код для файла' %}"
                                        maxlength="50">
                                 <div class="form-text">
                                     <small class="text-muted">
                                         <i class="fas fa-info-circle me-1"></i>
-                                        Любые символы, до 50 знаков. Оставьте пустым для автоматической генерации.
+                                        {% trans 'Любые символы, до 50 знаков. Оставьте пустым для автоматической генерации 6-значного числового кода.' %}
+                                    </small>
+                                </div>
+                                <div id="codeStatus" class="mt-2" style="display: none;">
+                                    <small class="text-success">
+                                        <i class="fas fa-check-circle me-1"></i>
+                                        <span id="codeStatusText"></span>
                                     </small>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="password" class="form-label">Пароль (необязательно)</label>
+                                <label for="password" class="form-label">{% trans 'Пароль (необязательно)' %}</label>
                                 <input type="password" class="form-control" id="password" name="password" 
-                                       placeholder="Защитить файл паролем">
+                                       placeholder="{% trans 'Защитить файл паролем' %}">
                             </div>
                         </div>
                     </div>
@@ -117,7 +123,7 @@
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary btn-lg">
                             <i class="fas fa-upload"></i>
-                            Загрузить файл
+                            {% trans 'Загрузить файл' %}
                         </button>
                     </div>
                 </form>
@@ -133,25 +139,25 @@
             <div class="col-md-3">
                 <div class="stat-item">
                     <div class="stat-number">{{ total_files|default:"0" }}</div>
-                    <div class="stat-label">Всего файлов</div>
+                    <div class="stat-label">{% trans 'Всего файлов' %}</div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-item">
                     <div class="stat-number">{{ today_files|default:"0" }}</div>
-                    <div class="stat-label">Загружено сегодня</div>
+                    <div class="stat-label">{% trans 'Загружено сегодня' %}</div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-item">
                     <div class="stat-number">25MB</div>
-                    <div class="stat-label">Максимальный размер</div>
+                    <div class="stat-label">{% trans 'Максимальный размер' %}</div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-item">
                     <div class="stat-number">24ч</div>
-                    <div class="stat-label">Время хранения</div>
+                    <div class="stat-label">{% trans 'Время хранения' %}</div>
                 </div>
             </div>
         </div>
@@ -162,7 +168,7 @@
 {% if recent_files %}
 <section class="md-section recent-files-section">
     <div class="md-container">
-        <h2 class="section-title">Мои недавние файлы</h2>
+        <h2 class="section-title">{% trans 'Мои недавние файлы' %}</h2>
         
         {% if recent_files %}
         <div class="recent-files-grid">
@@ -175,14 +181,14 @@
                         </div>
                         <div class="ms-3 flex-grow-1">
                             <h6 class="mb-1">{{ file.filename }}</h6>
-                            <small class="text-muted">{{ file.created_at|timesince }} назад</small>
+                            <small class="text-muted">{{ file.created_at|timesince }} {% trans 'назад' %}</small>
                             <br>
                             <small class="badge {{ file.get_file_type_color }} bg-light">
                                 {{ file.get_file_type_name }}
                             </small>
                         </div>
                         {% if file.is_protected %}
-                        <span class="badge bg-warning" title="Файл защищен паролем">
+                        <span class="badge bg-warning" title="{% trans 'Файл защищен паролем' %}">
                             <i class="fas fa-lock me-1"></i>Защищен
                         </span>
                         {% endif %}
@@ -190,11 +196,11 @@
                     
                     <div class="file-details">
                         <div class="detail-item">
-                            <span class="detail-label">Код:</span>
+                            <span class="detail-label">{% trans 'Код:' %}</span>
                             <span class="detail-value">{{ file.code }}</span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label">Размер:</span>
+                            <span class="detail-label">{% trans 'Размер:' %}</span>
                             <span class="detail-value">
                                 {% if file.file_size < 1024 %}
                                     {{ file.file_size }} Б
@@ -206,14 +212,14 @@
                             </span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label">Скачиваний:</span>
+                            <span class="detail-label">{% trans 'Скачиваний:' %}</span>
                             <span class="detail-value">{{ file.download_count }}</span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label">Истекает:</span>
+                            <span class="detail-label">{% trans 'Истекает:' %}</span>
                             <span class="detail-value">
                                 {% if file.is_expired %}
-                                    <span class="text-danger">Истек</span>
+                                    <span class="text-danger">{% trans 'Истек' %}</span>
                                 {% else %}
                                     {{ file.get_remaining_time }}
                                 {% endif %}
@@ -224,14 +230,14 @@
                     <div class="file-actions">
                         <a href="{% url 'files:file_detail' file.code %}" class="btn btn-primary btn-sm">
                             <i class="fas fa-eye"></i>
-                            Просмотр
+                            {% trans 'Просмотр' %}
                         </a>
                         <a href="{% url 'files:download_file' file.code %}" class="btn btn-secondary btn-sm">
                             <i class="fas fa-download"></i>
-                            Скачать
+                            {% trans 'Скачать' %}
                         </a>
                         {% if file.is_protected %}
-                        <span class="badge bg-warning ms-2" title="Файл защищен паролем">
+                        <span class="badge bg-warning ms-2" title="{% trans 'Файл защищен паролем' %}">
                             <i class="fas fa-lock"></i>
                         </span>
                         {% endif %}
@@ -243,15 +249,15 @@
         {% else %}
         <div class="text-center py-4">
             <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
-            <h5 class="text-muted">У вас пока нет файлов</h5>
-            <p class="text-muted">Загрузите первый файл, чтобы начать!</p>
+            <h5 class="text-muted">{% trans 'У вас пока нет файлов' %}</h5>
+            <p class="text-muted">{% trans 'Загрузите первый файл, чтобы начать!' %}</p>
         </div>
         {% endif %}
         
         <div class="text-center mt-4">
             <a href="{% url 'files:recent_files' %}" class="btn btn-outlined">
                 <i class="fas fa-user"></i>
-                Посмотреть все мои файлы
+                {% trans 'Посмотреть все мои файлы' %}
             </a>
         </div>
     </div>
@@ -272,9 +278,9 @@
                     </div>
                     <div class="flex-grow-1">
                         <h4 class="modal-title mb-1" id="uploadSuccessModalLabel">
-                            Файл успешно загружен!
+                            {% trans 'Файл успешно загружен!' %}
                         </h4>
-                        <p class="mb-0 opacity-75">Ваш файл готов к использованию</p>
+                        <p class="mb-0 opacity-75">{% trans 'Ваш файл готов к использованию' %}</p>
                     </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -299,7 +305,7 @@
                                     <i class="fas fa-file-alt text-white"></i>
                                 </div>
                                 <div class="detail-content">
-                                    <div class="detail-label">Имя файла</div>
+                                    <div class="detail-label">{% trans 'Имя файла' %}</div>
                                     <div class="detail-value fw-bold" id="modalFileName"></div>
                                 </div>
                             </div>
@@ -309,7 +315,7 @@
                                     <i class="fas fa-hashtag text-white"></i>
                                 </div>
                                 <div class="detail-content">
-                                    <div class="detail-label">Код файла</div>
+                                    <div class="detail-label">{% trans 'Код файла' %}</div>
                                     <div class="detail-value fw-bold text-success" id="modalFileCode"></div>
                                 </div>
                             </div>
@@ -319,7 +325,7 @@
                                     <i class="fas fa-weight-hanging text-white"></i>
                                 </div>
                                 <div class="detail-content">
-                                    <div class="detail-label">Размер</div>
+                                    <div class="detail-label">{% trans 'Размер' %}</div>
                                     <div class="detail-value fw-bold" id="modalFileSize"></div>
                                 </div>
                             </div>
@@ -329,7 +335,7 @@
                                     <i class="fas fa-clock text-white"></i>
                                 </div>
                                 <div class="detail-content">
-                                    <div class="detail-label">Истекает</div>
+                                    <div class="detail-label">{% trans 'Истекает' %}</div>
                                     <div class="detail-value fw-bold" id="modalFileExpiry"></div>
                                 </div>
                             </div>
@@ -341,11 +347,11 @@
                         <div class="qr-section text-center">
                             <h6 class="mb-3 text-muted">
                                 <i class="fas fa-qrcode me-2"></i>
-                                QR код
+                                {% trans 'QR код' %}
                             </h6>
                             <div class="qr-placeholder p-3 border rounded bg-light">
                                 <i class="fas fa-qrcode fa-2x text-muted mb-2"></i>
-                                <p class="small text-muted mb-0">QR код генерируется...</p>
+                                <p class="small text-muted mb-0">{% trans 'QR код генерируется...' %}</p>
                             </div>
                         </div>
                         
@@ -353,16 +359,16 @@
                         <div class="quick-actions mt-4">
                             <h6 class="mb-3 text-muted">
                                 <i class="fas fa-bolt me-2"></i>
-                                Быстрые действия
+                                {% trans 'Быстрые действия' %}
                             </h6>
                             <div class="d-grid gap-2">
                                 <button class="btn btn-outline-primary btn-sm" id="copyLinkBtn">
                                     <i class="fas fa-link me-2"></i>
-                                    Копировать ссылку
+                                    {% trans 'Копировать ссылку' %}
                                 </button>
                                 <button class="btn btn-outline-success btn-sm" id="downloadBtn">
                                     <i class="fas fa-download me-2"></i>
-                                    Скачать файл
+                                    {% trans 'Скачать файл' %}
                                 </button>
                             </div>
                         </div>
@@ -375,11 +381,11 @@
                 <div class="d-flex justify-content-between w-100">
                     <button type="button" class="btn btn-outline-secondary" id="uploadAnotherBtn">
                         <i class="fas fa-plus me-2"></i>
-                        Загрузить еще файл
+                        {% trans 'Загрузить еще файл' %}
                     </button>
                     <button type="button" class="btn btn-primary" id="goToFileBtn">
                         <i class="fas fa-external-link-alt me-2"></i>
-                        Перейти к файлу
+                        {% trans 'Перейти к файлу' %}
                     </button>
                 </div>
             </div>

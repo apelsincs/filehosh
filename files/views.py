@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, JsonResponse, FileResponse
 from django.contrib import messages
+from django.utils.translation import gettext as _
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
 from django.conf import settings
@@ -12,10 +13,14 @@ from django.urls import reverse
 from django_ratelimit.decorators import ratelimit
 from django.contrib.sitemaps import Sitemap
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.cache import cache
 import random
 import string
 from datetime import timedelta
 import os
+import subprocess
+import shutil
+import mimetypes
 
 from .models import File
 from .forms import FileUploadForm, PasswordForm, FileEditForm
@@ -23,12 +28,11 @@ from .forms import FileUploadForm, PasswordForm, FileEditForm
 
 def generate_unique_code():
     """
-    Генерирует уникальный код для файла.
-    Использует комбинацию букв и цифр для создания коротких кодов.
+    Генерирует уникальный 6-значный числовой код для файла.
     """
     while True:
-        # Генерируем код из 5 символов (буквы и цифры)
-        code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+        # Генерируем код из 6 цифр
+        code = ''.join(random.choices(string.digits, k=6))
         
         # Проверяем уникальность
         if not File.objects.filter(code=code).exists():
@@ -117,26 +121,47 @@ def home(request):
                 return JsonResponse(response_data)
             
             # Для обычных запросов показываем сообщение и перенаправляем
-            messages.success(request, f'Файл успешно загружен! Код: {file_instance.code}')
+            messages.success(request, _('Файл успешно загружен! Код: %(code)s') % {'code': file_instance.code})
             return redirect('files:file_detail', code=file_instance.code)
     else:
         form = FileUploadForm()
     
-    # Получаем последние загруженные файлы для отображения
+    # Получаем последние загруженные файлы для отображения (с кешированием)
     # Показываем только файлы текущего пользователя (если есть session_id)
     if hasattr(request, 'anonymous_session_id') and request.anonymous_session_id:
-        recent_files = File.objects.filter(
-            session_id=request.anonymous_session_id,
-            expires_at__gt=timezone.now(),
-            is_deleted=False
-        ).order_by('-created_at')[:3]
+        # Кешируем недавние файлы на 2 минуты
+        cache_key = f'recent_files_{request.anonymous_session_id}'
+        recent_files = cache.get(cache_key)
+        
+        if recent_files is None:
+            recent_files = list(File.objects.filter(
+                session_id=request.anonymous_session_id,
+                expires_at__gt=timezone.now(),
+                is_deleted=False
+            ).order_by('-created_at')[:3])
+            cache.set(cache_key, recent_files, 120)  # 2 минуты
     else:
         # Если session_id нет, показываем пустой список
         recent_files = []
     
-    # Статистика для главной страницы
-    total_files = File.objects.count()  # Все файлы (включая удаленные)
-    total_downloads = File.objects.aggregate(Sum('download_count')).get('download_count__sum') or 0
+    # Статистика для главной страницы (с кешированием)
+    
+    # Кешируем статистику на 5 минут
+    cache_key = f'home_stats_{request.anonymous_session_id or "anonymous"}'
+    cached_stats = cache.get(cache_key)
+    
+    if cached_stats is None:
+        total_files = File.objects.count()  # Все файлы (включая удаленные)
+        total_downloads = File.objects.aggregate(Sum('download_count')).get('download_count__sum') or 0
+        
+        cached_stats = {
+            'total_files': total_files,
+            'total_downloads': total_downloads,
+        }
+        cache.set(cache_key, cached_stats, 300)  # 5 минут
+    else:
+        total_files = cached_stats['total_files']
+        total_downloads = cached_stats['total_downloads']
     active_files = File.objects.filter(expires_at__gt=timezone.now(), is_deleted=False).count()
     protected_files = File.objects.filter(is_protected=True, expires_at__gt=timezone.now(), is_deleted=False).count()
     
@@ -173,7 +198,7 @@ def file_detail(request, code):
     
     # Проверяем, не истек ли файл
     if file_instance.is_expired():
-        messages.error(request, 'Файл истек и больше недоступен.')
+        messages.error(request, _('Файл истек и больше недоступен.'))
         return redirect('files:home')
     
     # Если файл защищен паролем, всегда запрашиваем пароль
@@ -181,10 +206,14 @@ def file_detail(request, code):
         if request.method == 'POST':
             password_form = PasswordForm(file_instance, request.POST)
             if password_form.is_valid():
-                # Пароль верный — показываем файл
-                pass  # Продолжаем выполнение
+                # Пароль верный — помечаем файл как авторизованный в текущей сессии
+                authorized = request.session.get('authorized_files', {})
+                authorized[file_instance.code] = True
+                request.session['authorized_files'] = authorized
+                request.session.modified = True
+                # Продолжаем выполнение (покажем карточку файла)
             else:
-                messages.error(request, 'Неверный пароль.')
+                messages.error(request, _('Неверный пароль.'))
                 return render(request, 'files/password_required.html', {
                     'file': file_instance,
                     'form': password_form
@@ -222,15 +251,22 @@ def download_file(request, code):
     if file_instance.is_expired():
         raise Http404("Файл истек")
     
-    # Если файл защищен паролем, проверяем пароль
+    # Если файл защищен паролем, проверяем пароль/авторизацию
     if file_instance.is_protected:
-        password = request.GET.get('password')
-        if not password:
-            raise Http404("Файл защищен паролем. Укажите пароль в параметре ?password=...")
-        
-        from django.contrib.auth.hashers import check_password
-        if not check_password(password, file_instance.password):
-            raise Http404("Неверный пароль")
+        authorized = request.session.get('authorized_files', {})
+        if not authorized.get(file_instance.code):
+            # Дополнительно поддерживаем разовый доступ через параметр ?password=
+            password = request.GET.get('password')
+            if not password:
+                # Перенаправляем на карточку файла для ввода пароля
+                return redirect('files:file_detail', code=file_instance.code)
+            from django.contrib.auth.hashers import check_password
+            if not check_password(password, file_instance.password or ''):
+                raise Http404(_('Неверный пароль'))
+            # Разрешаем и запоминаем в сессии
+            authorized[file_instance.code] = True
+            request.session['authorized_files'] = authorized
+            request.session.modified = True
     
     # Увеличиваем счетчик скачиваний
     file_instance.increment_download_count()
@@ -239,6 +275,93 @@ def download_file(request, code):
     file_stream = file_instance.file.open('rb')
     response = FileResponse(file_stream, as_attachment=True, filename=file_instance.filename)
     response['Content-Length'] = file_instance.file_size
+    return response
+
+
+@ratelimit(key='ip', rate='20/m', method=['GET'])
+def view_file(request, code):
+    """
+    Просмотр (inline) файла по коду. Для поддерживаемых браузером типов откроется предпросмотр.
+    """
+    file_instance = get_object_or_404(File, code=code.upper())
+    
+    # Базовые проверки
+    if file_instance.is_deleted:
+        raise Http404(_('Файл не найден'))
+    if file_instance.is_expired():
+        raise Http404(_('Файл истек'))
+
+    # Защита паролем
+    if file_instance.is_protected:
+        authorized = request.session.get('authorized_files', {})
+        if not authorized.get(file_instance.code):
+            # Требуем ввод пароля на карточке файла
+            return redirect('files:file_detail', code=file_instance.code)
+
+    # Определяем стратегию предпросмотра
+    _, ext = os.path.splitext(file_instance.filename.lower())
+    doc_like_exts = {'.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.odt', '.ods', '.odp'}
+
+    # Для PDF и изображений — отдаём как есть inline
+    if ext in {'.pdf', '.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.svg'}:
+        file_stream = file_instance.file.open('rb')
+        response = FileResponse(file_stream, as_attachment=False, filename=file_instance.filename)
+        response['Content-Length'] = file_instance.file_size
+        return response
+
+    # Для офисных форматов — пробуем конвертировать в PDF (кэшируем)
+    if ext in doc_like_exts:
+        previews_dir = os.path.join(settings.MEDIA_ROOT, 'previews')
+        os.makedirs(previews_dir, exist_ok=True)
+        preview_pdf_path = os.path.join(previews_dir, f'{file_instance.code}.pdf')
+
+        # Нужна повторная конвертация, если превью нет или исходник новее
+        need_convert = True
+        if os.path.exists(preview_pdf_path):
+            try:
+                src_mtime = os.path.getmtime(file_instance.file.path)
+                pdf_mtime = os.path.getmtime(preview_pdf_path)
+                need_convert = pdf_mtime < src_mtime
+            except Exception:
+                need_convert = True
+
+        if need_convert:
+            libreoffice = shutil.which('libreoffice') or shutil.which('soffice')
+            if not libreoffice:
+                # Нет LibreOffice — fallback: отдаём оригинал на скачивание
+                return redirect('files:download_file', code=file_instance.code)
+            try:
+                # Конвертируем через LibreOffice в headless режиме
+                subprocess.check_call([
+                    libreoffice,
+                    '--headless',
+                    '--convert-to', 'pdf',
+                    '--outdir', previews_dir,
+                    file_instance.file.path,
+                ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except subprocess.CalledProcessError:
+                return redirect('files:download_file', code=file_instance.code)
+
+        # Отдаём PDF inline
+        if os.path.exists(preview_pdf_path):
+            preview_stream = open(preview_pdf_path, 'rb')
+            response = FileResponse(preview_stream, as_attachment=False, filename=os.path.basename(preview_pdf_path))
+            try:
+                response['Content-Length'] = os.path.getsize(preview_pdf_path)
+            except Exception:
+                pass
+            return response
+
+    # Для остальных типов — пробуем отдать inline по mime, иначе скачивание
+    file_stream = file_instance.file.open('rb')
+    mime, _ = mimetypes.guess_type(file_instance.filename)
+    response = FileResponse(file_stream, as_attachment=False, filename=file_instance.filename)
+    if mime:
+        response['Content-Type'] = mime
+    try:
+        response['Content-Length'] = file_instance.file_size
+    except Exception:
+        pass
     return response
 
 
@@ -254,7 +377,7 @@ def edit_file(request, code):
     
     # Проверяем, не истек ли файл
     if file_instance.is_expired():
-        messages.error(request, 'Файл истек и больше недоступен для редактирования.')
+        messages.error(request, _('Файл истек и больше недоступен для редактирования.'))
         return redirect('files:home')
     
     if request.method == 'POST':
@@ -277,7 +400,7 @@ def edit_file(request, code):
                     file_instance.is_protected = False
             
             file_instance.save()
-            messages.success(request, 'Информация о файле обновлена!')
+            messages.success(request, _('Информация о файле обновлена!'))
             return redirect('files:file_detail', code=file_instance.code)
         else:
             # Возвращаем ошибки валидации для AJAX запросов
@@ -310,13 +433,13 @@ def delete_file(request, code):
     
     # Проверяем, не истек ли файл
     if file_instance.is_expired():
-        messages.error(request, 'Файл истек и больше недоступен для удаления.')
+        messages.error(request, _('Файл истек и больше недоступен для удаления.'))
         return redirect('files:home')
     
     if request.method == 'POST':
         # Используем наш кастомный метод удаления
         file_instance.delete()
-        messages.success(request, 'Файл успешно удален!')
+        messages.success(request, _('Файл успешно удален!'))
         return redirect('files:home')
     
     context = {
@@ -333,7 +456,7 @@ def check_code_availability(request):
     code = request.GET.get('code', '').strip()
     
     if not code:
-        return JsonResponse({'available': False, 'error': 'Код не указан'})
+        return JsonResponse({'available': False, 'error': _('Код не указан')})
     
     # Проверяем, не занят ли код
     is_occupied = File.objects.filter(code=code).exists()
@@ -343,6 +466,48 @@ def check_code_availability(request):
         'code': code,
         'occupied': is_occupied
     })
+
+
+def direct_pdf_view(request, code):
+    """
+    Прямой просмотр PDF файла по коду (например, /5711).
+    Если файл не PDF или защищен паролем, перенаправляет на детальную страницу.
+    """
+    try:
+        file_instance = get_object_or_404(File, code=code.upper())
+    except Http404:
+        # Если файл не найден, показываем 404
+        raise Http404(_('Файл не найден'))
+    
+    # Проверяем, не удален ли файл
+    if file_instance.is_deleted:
+        raise Http404(_('Файл не найден'))
+    
+    # Проверяем, не истек ли файл
+    if file_instance.is_expired():
+        raise Http404(_('Файл истек'))
+    
+    # Если файл защищен паролем, перенаправляем на детальную страницу
+    if file_instance.is_protected:
+        return redirect('files:file_detail', code=file_instance.code)
+    
+    # Проверяем, является ли файл PDF
+    _, ext = os.path.splitext(file_instance.filename.lower())
+    if ext != '.pdf':
+        # Если не PDF, перенаправляем на детальную страницу
+        return redirect('files:file_detail', code=file_instance.code)
+    
+    # Отдаем PDF файл напрямую для просмотра
+    file_stream = file_instance.file.open('rb')
+    response = FileResponse(file_stream, as_attachment=False, filename=file_instance.filename)
+    response['Content-Type'] = 'application/pdf'
+    response['Content-Length'] = file_instance.file_size
+    response['Content-Disposition'] = f'inline; filename="{file_instance.filename}"'
+    
+    # Увеличиваем счетчик просмотров
+    file_instance.increment_download_count()
+    
+    return response
 
 
 def search_files(request):
@@ -584,3 +749,20 @@ def sitemap_xml(request):
     xml += '</urlset>'
     
     return HttpResponse(xml, content_type='application/xml')
+
+
+# Error handlers
+def error_400(request, exception):
+    return render(request, '400.html', {'exception': exception}, status=400)
+
+
+def error_403(request, exception):
+    return render(request, '403.html', {'exception': exception}, status=403)
+
+
+def error_404(request, exception):
+    return render(request, '404.html', {'exception': exception}, status=404)
+
+
+def error_500(request):
+    return render(request, '500.html', status=500)

@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from .models import File
 import os
+from django.utils.translation import gettext_lazy as _
 
 
 class FileUploadForm(forms.ModelForm):
@@ -14,10 +15,10 @@ class FileUploadForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Введите желаемый код (необязательно)',
-            'title': 'Любые символы'
+            'placeholder': _('Введите желаемый код (необязательно)'),
+            'title': _('Любые символы')
         }),
-        help_text='Оставьте пустым для автоматической генерации'
+        help_text=_('Оставьте пустым для автоматической генерации')
     )
     
     password = forms.CharField(
@@ -25,9 +26,9 @@ class FileUploadForm(forms.ModelForm):
         required=False,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Введите пароль (необязательно)'
+            'placeholder': _('Введите пароль (необязательно)')
         }),
-        help_text='Оставьте пустым для доступа без пароля'
+        help_text=_('Оставьте пустым для доступа без пароля')
     )
     
     is_protected = forms.BooleanField(
@@ -35,7 +36,7 @@ class FileUploadForm(forms.ModelForm):
         widget=forms.CheckboxInput(attrs={
             'class': 'form-check-input',
         }),
-        label='Защитить паролем'
+        label=_('Защитить паролем')
     )
 
     class Meta:
@@ -51,19 +52,21 @@ class FileUploadForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['file'].help_text = f'Максимальный размер: {settings.MAX_FILE_SIZE // (1024*1024)} МБ'
+        self.fields['file'].help_text = _('Максимальный размер: %(size)s МБ') % {
+            'size': settings.MAX_FILE_SIZE // (1024*1024)
+        }
     
     def clean_file(self):
         """Валидация загруженного файла"""
         file = self.cleaned_data.get('file')
         
         if not file:
-            raise forms.ValidationError('Пожалуйста, выберите файл для загрузки.')
+            raise forms.ValidationError(_('Пожалуйста, выберите файл для загрузки.'))
         
         # Проверяем размер файла
         if file.size > settings.MAX_FILE_SIZE:
             max_size_mb = settings.MAX_FILE_SIZE // (1024 * 1024)
-            raise forms.ValidationError(f'Размер файла не должен превышать {max_size_mb} МБ.')
+            raise forms.ValidationError(_('Размер файла не должен превышать %(size)s МБ.') % {'size': max_size_mb})
 
         return file
     
@@ -75,7 +78,7 @@ class FileUploadForm(forms.ModelForm):
             # Убираем все ограничения на символы и длину
             # Проверяем только уникальность
             if File.objects.filter(code=custom_code).exists():
-                raise forms.ValidationError('Этот код уже используется. Выберите другой.')
+                raise forms.ValidationError(_('Этот код уже используется. Выберите другой.'))
         
         return custom_code if custom_code else None
     
@@ -87,7 +90,7 @@ class FileUploadForm(forms.ModelForm):
         wants_protection = self.data.get('is_protected') in ['on', 'true', '1']
 
         if wants_protection and not password:
-            raise forms.ValidationError('Укажите пароль, если включена защита.')
+            raise forms.ValidationError(_('Укажите пароль, если включена защита.'))
         
         # Убираем все ограничения на длину и сложность пароля
         return password
@@ -102,10 +105,10 @@ class PasswordForm(forms.Form):
         max_length=128,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Введите пароль для доступа к файлу',
+            'placeholder': _('Введите пароль для доступа к файлу'),
             'autofocus': True
         }),
-        label='Пароль'
+        label=_('Пароль')
     )
     
     def __init__(self, file_instance=None, *args, **kwargs):
@@ -122,7 +125,7 @@ class PasswordForm(forms.Form):
             is_hashed = stored.startswith('pbkdf2_') or stored.startswith('argon2') or stored.startswith('bcrypt')
             valid = check_password(password, stored) if is_hashed else (password == stored)
             if not valid:
-                raise forms.ValidationError('Неверный пароль.')
+                raise forms.ValidationError(_('Неверный пароль.'))
         
         return password
 
@@ -137,12 +140,12 @@ class FileEditForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Введите новый код',
-            'title': 'Любые символы',
+            'placeholder': _('Введите новый код'),
+            'title': _('Любые символы'),
             'id': 'newCode',
             'maxlength': '50'
         }),
-        help_text='Оставьте пустым, чтобы не изменять'
+        help_text=_('Оставьте пустым, чтобы не изменять')
     )
     
     new_password = forms.CharField(
@@ -150,9 +153,9 @@ class FileEditForm(forms.ModelForm):
         required=False,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Введите новый пароль'
+            'placeholder': _('Введите новый пароль')
         }),
-        help_text='Оставьте пустым, чтобы убрать пароль'
+        help_text=_('Оставьте пустым, чтобы убрать пароль')
     )
     
     class Meta:
@@ -167,6 +170,6 @@ class FileEditForm(forms.ModelForm):
             # Убираем все ограничения на символы и длину
             # Проверяем только уникальность, исключая текущий файл
             if File.objects.filter(code=new_code).exclude(pk=self.instance.pk).exists():
-                raise forms.ValidationError('Этот код уже используется. Выберите другой.')
+                raise forms.ValidationError(_('Этот код уже используется. Выберите другой.'))
         
         return new_code if new_code else None 

@@ -43,11 +43,11 @@ class MaterialFileUploader {
             isProtectedCheckbox.addEventListener('change', (e) => {
                 if (e.target.checked) {
                     passwordField.required = true;
-                    passwordField.placeholder = 'Введите пароль для защиты файла';
+                    try { passwordField.placeholder = gettext('Введите пароль для защиты файла'); } catch (_) { passwordField.placeholder = 'Введите пароль для защиты файла'; }
                     passwordField.style.borderColor = '#dc3545';
                 } else {
                     passwordField.required = false;
-                    passwordField.placeholder = 'Защитить файл паролем';
+                    try { passwordField.placeholder = gettext('Защитить файл паролем'); } catch (_) { passwordField.placeholder = 'Защитить файл паролем'; }
                     passwordField.style.borderColor = '';
                     passwordField.value = '';
                 }
@@ -130,11 +130,11 @@ class MaterialFileUploader {
         const uploadHint = this.uploadArea.querySelector('.upload-hint');
         
         if (uploadText) {
-            uploadText.textContent = `Выбран файл: ${file.name}`;
+            try { uploadText.textContent = interpolate(gettext('Выбран файл: %s'), [file.name], true); } catch (_) { uploadText.textContent = `Выбран файл: ${file.name}`; }
         }
         
         if (uploadHint) {
-            uploadHint.textContent = `Размер: ${this.formatFileSize(file.size)}`;
+            try { uploadHint.textContent = interpolate(gettext('Размер: %s'), [this.formatFileSize(file.size)], true); } catch (_) { uploadHint.textContent = `Размер: ${this.formatFileSize(file.size)}`; }
         }
 
         // Анимация появления
@@ -156,14 +156,14 @@ class MaterialFileUploader {
         // Проверка размера
         if (file.size > maxSize) {
             isValid = false;
-            errorMessage = 'Файл слишком большой. Максимальный размер: 25MB';
+            try { errorMessage = gettext('Файл слишком большой. Максимальный размер: 25MB'); } catch (_) { errorMessage = 'Файл слишком большой. Максимальный размер: 25MB'; }
         }
 
         // Проверка типа
         const isAllowedType = allowedTypes.some(type => file.type.startsWith(type));
         if (!isAllowedType && file.type !== '') {
             isValid = false;
-            errorMessage = 'Неподдерживаемый тип файла';
+            try { errorMessage = gettext('Неподдерживаемый тип файла'); } catch (_) { errorMessage = 'Неподдерживаемый тип файла'; }
         }
 
         if (!isValid) {
@@ -176,7 +176,7 @@ class MaterialFileUploader {
         event.preventDefault();
         
         if (!this.fileInput.files.length) {
-            this.showNotification('Пожалуйста, выберите файл', 'warning');
+            try { this.showNotification(gettext('Пожалуйста, выберите файл'), 'warning'); } catch (_) { this.showNotification('Пожалуйста, выберите файл', 'warning'); }
             return;
         }
 
@@ -214,11 +214,11 @@ class MaterialFileUploader {
                     this.showUploadSuccessModal(result);
                 }
             } else {
-                const errorMessage = result.error || 'Ошибка загрузки файла';
+                const errorMessage = result.error || (typeof gettext === 'function' ? gettext('Ошибка загрузки файла') : 'Ошибка загрузки файла');
                 this.showNotification(errorMessage, 'error');
             }
         } catch (error) {
-            this.showNotification(error.message || 'Ошибка загрузки', 'error');
+            this.showNotification(error.message || (typeof gettext === 'function' ? gettext('Ошибка загрузки') : 'Ошибка загрузки'), 'error');
         } finally {
             this.isUploading = false;
             this.hideUploadProgress();
@@ -229,12 +229,13 @@ class MaterialFileUploader {
         // Создаем индикатор прогресса в Material Design стиле
         const progressContainer = document.createElement('div');
         progressContainer.className = 'upload-progress-container';
+        const progressText = (typeof gettext === 'function' ? gettext('Загрузка файла...') : 'Загрузка файла...');
         progressContainer.innerHTML = `
             <div class="upload-progress">
                 <div class="progress-indicator">
                     <div class="progress-circle"></div>
                 </div>
-                <div class="progress-text">Загрузка файла...</div>
+                <div class="progress-text">${progressText}</div>
             </div>
         `;
 
@@ -354,9 +355,9 @@ class MaterialFileUploader {
                         // Fallback копирование
                         if (navigator.clipboard && window.isSecureContext) {
                             navigator.clipboard.writeText(this.lastUploadedFileUrl).then(() => {
-                                this.showNotification('Ссылка скопирована в буфер обмена!', 'success');
+                                this.showNotification(typeof gettext==='function'? gettext('Ссылка скопирована в буфер обмена!') : 'Ссылка скопирована в буфер обмена!', 'success');
                             }).catch(() => {
-                                this.showNotification('Не удалось скопировать ссылку', 'error');
+                                this.showNotification(typeof gettext==='function'? gettext('Не удалось скопировать ссылку') : 'Не удалось скопировать ссылку', 'error');
                             });
                         } else {
                             // Fallback для старых браузеров
@@ -371,9 +372,9 @@ class MaterialFileUploader {
                             
                             try {
                                 document.execCommand('copy');
-                                this.showNotification('Ссылка скопирована в буфер обмена!', 'success');
+                                this.showNotification(typeof gettext==='function'? gettext('Ссылка скопирована в буфер обмена!') : 'Ссылка скопирована в буфер обмена!', 'success');
                             } catch (err) {
-                                this.showNotification('Не удалось скопировать ссылку', 'error');
+                                this.showNotification(typeof gettext==='function'? gettext('Не удалось скопировать ссылку') : 'Не удалось скопировать ссылку', 'error');
                             }
                             
                             document.body.removeChild(textArea);
@@ -412,11 +413,11 @@ class MaterialFileUploader {
             const uploadHint = this.uploadArea.querySelector('.upload-hint');
             
             if (uploadText) {
-                uploadText.textContent = 'Перетащите файл сюда или нажмите для выбора';
+                uploadText.textContent = (typeof gettext==='function'? gettext('Перетащите файл сюда или нажмите для выбора') : 'Перетащите файл сюда или нажмите для выбора');
             }
             
             if (uploadHint) {
-                uploadHint.textContent = 'Максимальный размер: 25MB';
+                uploadHint.textContent = (typeof gettext==='function'? gettext('Максимальный размер: 25MB') : 'Максимальный размер: 25MB');
             }
         }
         
@@ -749,6 +750,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     `;
     document.head.appendChild(style);
+    
+    // Инициализируем менеджер согласия на cookies (с безопасным fallback)
+    try {
+        // Может бросить ReferenceError из-за TDZ, если класс объявлен ниже
+        window.cookieConsentManager = new CookieConsentManager();
+    } catch (e) {
+        // Легковесная инициализация, если класс недоступен на момент вызова
+        const banner = document.getElementById('cookie-consent-banner');
+        const acceptBtn = document.getElementById('cookie-consent-accept');
+        if (banner && acceptBtn && !document.cookie.includes('cookie_consent=')) {
+            banner.style.display = 'block';
+            acceptBtn.addEventListener('click', () => {
+                const maxAge = 365 * 24 * 60 * 60; // 1 год
+                document.cookie = `cookie_consent=yes; max-age=${maxAge}; path=/; SameSite=Lax`;
+                banner.style.display = 'none';
+            });
+        }
+    }
 });
 
 // Класс для управления анонимными сессиями
@@ -876,7 +895,7 @@ class AnonymousSessionManager {
         if (navigator.clipboard && window.isSecureContext) {
             // Используем современный Clipboard API
             navigator.clipboard.writeText(text).then(() => {
-                showNotification('Ссылка скопирована в буфер обмена!', 'success');
+                showNotification(typeof gettext==='function'? gettext('Ссылка скопирована в буфер обмена!') : 'Ссылка скопирована в буфер обмена!', 'success');
             }).catch(() => {
                 fallbackCopyToClipboard(text);
             });
@@ -899,9 +918,9 @@ class AnonymousSessionManager {
         
         try {
             document.execCommand('copy');
-            showNotification('Ссылка скопирована в буфер обмена!', 'success');
+            showNotification(typeof gettext==='function'? gettext('Ссылка скопирована в буфер обмена!') : 'Ссылка скопирована в буфер обмена!', 'success');
         } catch (err) {
-            showNotification('Не удалось скопировать ссылку', 'error');
+            showNotification(typeof gettext==='function'? gettext('Не удалось скопировать ссылку') : 'Не удалось скопировать ссылку', 'error');
         }
         
         document.body.removeChild(textArea);
@@ -919,10 +938,15 @@ class AnonymousSessionManager {
                 // Очищаем предыдущий таймер
                 clearTimeout(debounceTimer);
                 
-                // Убираем существующий popover
+                // Убираем существующий popover и статус
                 const existingPopover = document.querySelector('.code-occupied-popover');
                 if (existingPopover) {
                     existingPopover.remove();
+                }
+                
+                const codeStatus = document.getElementById('codeStatus');
+                if (codeStatus) {
+                    codeStatus.style.display = 'none';
                 }
                 
                 // Проверяем код через 500ms после остановки ввода
@@ -931,12 +955,38 @@ class AnonymousSessionManager {
                         const isAvailable = await this.checkCodeAvailability(code);
                         if (!isAvailable) {
                             this.showCodeOccupiedPopover(customCodeInput, 
-                                'Пожалуйста, выберите другой код. Этот код уже используется другим файлом.');
+                                typeof gettext === 'function' ? gettext('Этот код уже используется. Выберите другой.') : 'Этот код уже используется. Выберите другой.');
                             // Подсвечиваем поле как неверное
                             customCodeInput.classList.add('is-invalid');
+                            
+                            // Показываем статус занятости
+                            const codeStatus = document.getElementById('codeStatus');
+                            const codeStatusText = document.getElementById('codeStatusText');
+                            if (codeStatus && codeStatusText) {
+                                codeStatusText.textContent = typeof gettext === 'function' ? gettext('Код занят') : 'Код занят';
+                                codeStatus.className = 'mt-2';
+                                codeStatus.innerHTML = `<small class="text-danger"><i class="fas fa-times-circle me-1"></i><span id="codeStatusText">${codeStatusText.textContent}</span></small>`;
+                                codeStatus.style.display = 'block';
+                            }
                         } else {
                             // Убираем подсветку если код доступен
                             customCodeInput.classList.remove('is-invalid');
+                            
+                            // Показываем статус доступности
+                            const codeStatus = document.getElementById('codeStatus');
+                            const codeStatusText = document.getElementById('codeStatusText');
+                            if (codeStatus && codeStatusText) {
+                                codeStatusText.textContent = typeof gettext === 'function' ? gettext('Код доступен') : 'Код доступен';
+                                codeStatus.className = 'mt-2';
+                                codeStatus.innerHTML = `<small class="text-success"><i class="fas fa-check-circle me-1"></i><span id="codeStatusText">${codeStatusText.textContent}</span></small>`;
+                                codeStatus.style.display = 'block';
+                            }
+                        }
+                    } else {
+                        // Если поле пустое, скрываем статус
+                        const codeStatus = document.getElementById('codeStatus');
+                        if (codeStatus) {
+                            codeStatus.style.display = 'none';
                         }
                     }
                 }, 500);
@@ -964,7 +1014,7 @@ class AnonymousSessionManager {
         if (!code || code.length < 1) return true;
         
         try {
-            const response = await fetch(`/check-code/?code=${encodeURIComponent(code)}`, {
+            const response = await fetch(`/files/check-code/?code=${encodeURIComponent(code)}`, {
                 method: 'GET',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
@@ -1001,9 +1051,9 @@ function copyToClipboard(text, button = null) {
     // Проверяем, что текст не пустой
     if (!text || text.trim() === '') {
         if (typeof showNotification === 'function') {
-            showNotification('Ошибка: нечего копировать', 'error');
+            showNotification(typeof gettext==='function'? gettext('Ошибка: нечего копировать') : 'Ошибка: нечего копировать', 'error');
         } else {
-            alert('Ошибка: нечего копировать');
+            alert(typeof gettext==='function'? gettext('Ошибка: нечего копировать') : 'Ошибка: нечего копировать');
         }
         return;
     }
@@ -1020,9 +1070,9 @@ function copyToClipboard(text, button = null) {
         // Используем современный Clipboard API
         navigator.clipboard.writeText(text).then(() => {
             if (typeof showNotification === 'function') {
-                showNotification('Ссылка скопирована в буфер обмена!', 'success');
+                showNotification(typeof gettext==='function'? gettext('Ссылка скопирована в буфер обмена!') : 'Ссылка скопирована в буфер обмена!', 'success');
             } else {
-                alert('Ссылка скопирована в буфер обмена!');
+                alert(typeof gettext==='function'? gettext('Ссылка скопирована в буфер обмена!') : 'Ссылка скопирована в буфер обмена!');
             }
         }).catch((error) => {
             fallbackCopyToClipboard(text, button);
@@ -1050,22 +1100,22 @@ function fallbackCopyToClipboard(text, button = null) {
         const successful = document.execCommand('copy');
         if (successful) {
             if (typeof showNotification === 'function') {
-                showNotification('Ссылка скопирована в буфер обмена!', 'success');
+                showNotification(typeof gettext==='function'? gettext('Ссылка скопирована в буфер обмена!') : 'Ссылка скопирована в буфер обмена!', 'success');
             } else {
-                alert('Ссылка скопирована в буфер обмена!');
+                alert(typeof gettext==='function'? gettext('Ссылка скопирована в буфер обмена!') : 'Ссылка скопирована в буфер обмена!');
             }
         } else {
             if (typeof showNotification === 'function') {
-                showNotification('Не удалось скопировать ссылку', 'error');
+                showNotification(typeof gettext==='function'? gettext('Не удалось скопировать ссылку') : 'Не удалось скопировать ссылку', 'error');
             } else {
-                alert('Не удалось скопировать ссылку');
+                alert(typeof gettext==='function'? gettext('Не удалось скопировать ссылку') : 'Не удалось скопировать ссылку');
             }
         }
     } catch (err) {
         if (typeof showNotification === 'function') {
-            showNotification('Не удалось скопировать ссылку', 'error');
+            showNotification(typeof gettext==='function'? gettext('Не удалось скопировать ссылку') : 'Не удалось скопировать ссылку', 'error');
         } else {
-            alert('Не удалось скопировать ссылку');
+            alert(typeof gettext==='function'? gettext('Не удалось скопировать ссылку') : 'Не удалось скопировать ссылку');
         }
     }
     
@@ -1129,7 +1179,7 @@ function getNotificationIcon(type) {
 // Глобальная функция для скачивания QR кода
 function downloadQRCode(imgElement) {
     if (!imgElement || !imgElement.src) {
-        showNotification('QR код не найден', 'error');
+        showNotification(typeof gettext==='function'? gettext('QR код не найден') : 'QR код не найден', 'error');
         return;
     }
     
@@ -1142,9 +1192,9 @@ function downloadQRCode(imgElement) {
         link.click();
         document.body.removeChild(link);
         
-        showNotification('QR код скачивается...', 'success');
+        showNotification(typeof gettext==='function'? gettext('QR код скачивается...') : 'QR код скачивается...', 'success');
     } catch (error) {
-        showNotification('Не удалось скачать QR код', 'error');
+        showNotification(typeof gettext==='function'? gettext('Не удалось скачать QR код') : 'Не удалось скачать QR код', 'error');
         console.error('Error downloading QR code:', error);
     }
 }
@@ -1174,15 +1224,15 @@ function setupGlobalCopyButtons() {
                     if (navigator.clipboard && window.isSecureContext) {
                         navigator.clipboard.writeText(url).then(() => {
                             if (typeof showNotification === 'function') {
-                                showNotification('Ссылка скопирована в буфер обмена!', 'success');
+                                showNotification(typeof gettext==='function'? gettext('Ссылка скопирована в буфер обмена!') : 'Ссылка скопирована в буфер обмена!', 'success');
                             } else {
-                                alert('Ссылка скопирована в буфер обмена!');
+                                alert(typeof gettext==='function'? gettext('Ссылка скопирована в буфер обмена!') : 'Ссылка скопирована в буфер обмена!');
                             }
                         }).catch(() => {
                             if (typeof showNotification === 'function') {
-                                showNotification('Не удалось скопировать ссылку', 'error');
+                                showNotification(typeof gettext==='function'? gettext('Не удалось скопировать ссылку') : 'Не удалось скопировать ссылку', 'error');
                             } else {
-                                alert('Не удалось скопировать ссылку');
+                                alert(typeof gettext==='function'? gettext('Не удалось скопировать ссылку') : 'Не удалось скопировать ссылку');
                             }
                         });
                     } else {
@@ -1199,15 +1249,15 @@ function setupGlobalCopyButtons() {
                         try {
                             document.execCommand('copy');
                             if (typeof showNotification === 'function') {
-                                showNotification('Ссылка скопирована в буфер обмена!', 'success');
+                                showNotification(typeof gettext==='function'? gettext('Ссылка скопирована в буфер обмена!') : 'Ссылка скопирована в буфер обмена!', 'success');
                             } else {
-                                alert('Ссылка скопирована в буфер обмена!');
+                                alert(typeof gettext==='function'? gettext('Ссылка скопирована в буфер обмена!') : 'Ссылка скопирована в буфер обмена!');
                             }
                         } catch (err) {
                             if (typeof showNotification === 'function') {
-                                showNotification('Не удалось скопировать ссылку', 'error');
+                                showNotification(typeof gettext==='function'? gettext('Не удалось скопировать ссылку') : 'Не удалось скопировать ссылку', 'error');
                             } else {
-                                alert('Не удалось скопировать ссылку');
+                                alert(typeof gettext==='function'? gettext('Не удалось скопировать ссылку') : 'Не удалось скопировать ссылку');
                             }
                         }
                         
@@ -1217,9 +1267,9 @@ function setupGlobalCopyButtons() {
             } else {
                 console.error('URL пустой или не найден');
                 if (typeof showNotification === 'function') {
-                    showNotification('Ошибка: ссылка не найдена', 'error');
+                    showNotification(typeof gettext==='function'? gettext('Ошибка: ссылка не найдена') : 'Ошибка: ссылка не найдена', 'error');
                 } else {
-                    alert('Ошибка: ссылка не найдена');
+                    alert(typeof gettext==='function'? gettext('Ошибка: ссылка не найдена') : 'Ошибка: ссылка не найдена');
                 }
             }
         }
@@ -1246,3 +1296,34 @@ window.showNotification = showNotification;
 window.getNotificationIcon = getNotificationIcon;
 window.downloadQRCode = downloadQRCode;
 window.setupGlobalCopyButtons = setupGlobalCopyButtons; 
+
+// Класс менеджера согласия на cookies
+class CookieConsentManager {
+    constructor() {
+        this.cookieName = 'cookie_consent';
+        this.banner = document.getElementById('cookie-consent-banner');
+        this.acceptBtn = document.getElementById('cookie-consent-accept');
+        this.init();
+    }
+
+    init() {
+        if (!this.banner || !this.acceptBtn) return;
+        if (!this.getCookie(this.cookieName)) {
+            this.banner.style.display = 'block';
+        }
+        this.acceptBtn.addEventListener('click', () => this.accept());
+    }
+
+    accept() {
+        const maxAge = 365 * 24 * 60 * 60; // 1 год
+        document.cookie = `${this.cookieName}=yes; max-age=${maxAge}; path=/; SameSite=Lax`;
+        this.banner.style.display = 'none';
+    }
+
+    getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+}

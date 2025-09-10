@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Поиск: {{ query }} - 0123.ru{% endblock %}
+{% block title %}{% trans 'Поиск' %}: {{ query }} - 0123.ru{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -10,10 +11,10 @@
             <div class="text-center mb-5">
                 <h2 class="mb-3">
                     <i class="fas fa-search me-2"></i>
-                    Результаты поиска
+                    {% trans 'Результаты поиска' %}
                 </h2>
                 <p class="lead text-muted">
-                    По запросу "<strong>{{ query }}</strong>" найдено {{ files_count }} файлов среди ваших загруженных файлов
+                    {% blocktrans with q=query count=files_count %}По запросу "<strong>{{ q }}</strong>" найдено {{ count }} файлов среди ваших загруженных файлов{% endblocktrans %}
                 </p>
                 
                 <!-- Search Form -->
@@ -22,7 +23,7 @@
                         <div class="col-md-6">
                             <div class="input-group">
                                 <input type="search" name="q" class="form-control form-control-lg" 
-                                       placeholder="Поиск среди ваших файлов..." value="{{ query }}">
+                                       placeholder="{% trans 'Поиск среди ваших файлов...' %}" value="{{ query }}">
                                 <button class="btn btn-primary btn-lg" type="submit">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -37,14 +38,14 @@
                 <!-- No Session -->
                 <div class="text-center py-5">
                     <i class="fas fa-user-slash fa-4x text-muted mb-4"></i>
-                    <h4 class="mb-3">Нет активной сессии</h4>
+                    <h4 class="mb-3">{% trans 'Нет активной сессии' %}</h4>
                     <p class="text-muted mb-4">
-                        Для поиска файлов необходимо загрузить хотя бы один файл.
-                        <br>Поиск доступен только среди ваших собственных файлов.
+                        {% trans 'Для поиска файлов необходимо загрузить хотя бы один файл.' %}
+                        <br>{% trans 'Поиск доступен только среди ваших собственных файлов.' %}
                     </p>
                     <a href="{% url 'files:home' %}" class="btn btn-primary">
                         <i class="fas fa-upload me-2"></i>
-                        Загрузить файл
+                        {% trans 'Загрузить файл' %}
                     </a>
                 </div>
             {% elif page_obj %}
@@ -62,7 +63,7 @@
                                             {{ file.filename|truncatechars:25 }}
                                         </h6>
                                         <p class="text-muted small mb-0">
-                                            Код: <strong>{{ file.code }}</strong>
+                                            {% trans 'Код:' %} <strong>{{ file.code }}</strong>
                                         </p>
                                         <small class="badge {{ file.get_file_type_color }} bg-light">
                                             {{ file.get_file_type_name }}
@@ -73,15 +74,15 @@
                                 <div class="file-details mb-3">
                                     <div class="row text-center">
                                         <div class="col-4">
-                                            <small class="text-muted d-block">Размер</small>
+                                            <small class="text-muted d-block">{% trans 'Размер' %}</small>
                                             <strong>{{ file.get_file_size_mb }} МБ</strong>
                                         </div>
                                         <div class="col-4">
-                                            <small class="text-muted d-block">Скачиваний</small>
+                                            <small class="text-muted d-block">{% trans 'Скачиваний' %}</small>
                                             <strong>{{ file.download_count }}</strong>
                                         </div>
                                         <div class="col-4">
-                                            <small class="text-muted d-block">Осталось</small>
+                                            <small class="text-muted d-block">{% trans 'Осталось' %}</small>
                                             <strong>{{ file.get_remaining_time }}</strong>
                                         </div>
                                     </div>
@@ -91,12 +92,12 @@
                                     <a href="{% url 'files:file_detail' file.code %}" 
                                        class="btn btn-primary btn-sm">
                                         <i class="fas fa-eye me-1"></i>
-                                        Просмотреть
+                                        {% trans 'Просмотреть' %}
                                     </a>
                                     <a href="{% url 'files:download_file' file.code %}" 
                                        class="btn btn-outline-success btn-sm">
                                         <i class="fas fa-download me-1"></i>
-                                        Скачать
+                                        {% trans 'Скачать' %}
                                     </a>
                                 </div>
                             </div>
@@ -104,7 +105,7 @@
                             <div class="card-footer bg-transparent">
                                 <small class="text-muted">
                                     <i class="fas fa-clock me-1"></i>
-                                    Загружен {{ file.created_at|date:"d.m.Y H:i" }}
+                                    {% trans 'Загружен' %} {{ file.created_at|date:"d.m.Y H:i" }}
                                 </small>
                             </div>
                         </div>
@@ -114,7 +115,7 @@
 
                 <!-- Pagination -->
                 {% if page_obj.has_other_pages %}
-                <nav aria-label="Навигация по страницам" class="mt-5">
+                <nav aria-label="{% trans 'Навигация по страницам' %}" class="mt-5">
                     <ul class="pagination justify-content-center">
                         {% if page_obj.has_previous %}
                             <li class="page-item">
@@ -151,19 +152,19 @@
                 <!-- No Results -->
                 <div class="text-center py-5">
                     <i class="fas fa-search fa-4x text-muted mb-4"></i>
-                    <h4 class="mb-3">Файлы не найдены</h4>
+                    <h4 class="mb-3">{% trans 'Файлы не найдены' %}</h4>
                     <p class="text-muted mb-4">
-                        По запросу "<strong>{{ query }}</strong>" среди ваших файлов ничего не найдено.
-                        <br>Попробуйте изменить поисковый запрос или проверьте правильность написания.
+                        {% blocktrans with q=query %}По запросу "<strong>{{ q }}</strong>" среди ваших файлов ничего не найдено.{% endblocktrans %}
+                        <br>{% trans 'Попробуйте изменить поисковый запрос или проверьте правильность написания.' %}
                     </p>
                     <div class="d-flex justify-content-center gap-3">
                         <a href="{% url 'files:recent_files' %}" class="btn btn-outline-primary">
                             <i class="fas fa-folder me-2"></i>
-                            Мои файлы
+                            {% trans 'Мои файлы' %}
                         </a>
                         <a href="{% url 'files:home' %}" class="btn btn-primary">
                             <i class="fas fa-upload me-2"></i>
-                            Загрузить файл
+                            {% trans 'Загрузить файл' %}
                         </a>
                     </div>
                 </div>

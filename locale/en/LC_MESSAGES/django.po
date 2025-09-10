@@ -1,0 +1,1514 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-05 13:46+0800\n"
+"PO-Revision-Date: 2025-09-05 13:46+0800\n"
+"Last-Translator: AUTO <EMAIL@ADDRESS>\n"
+"Language-Team: English <LL@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Введите желаемый код (необязательно)"
+msgstr "Enter desired code (optional)"
+
+msgid "Любые символы"
+msgstr "Any characters"
+
+msgid "Любые символы, до 50 знаков. Оставьте пустым для автоматической генерации 6-значного числового кода."
+msgstr "Any characters, up to 50 characters. Leave empty for automatic generation of 6-digit numeric code."
+
+msgid "Оставьте пустым для автоматической генерации"
+msgstr "Leave empty for automatic generation"
+
+msgid "Введите пароль (необязательно)"
+msgstr "Enter password (optional)"
+
+msgid "Оставьте пустым для доступа без пароля"
+msgstr "Leave empty for public access"
+
+msgid "Защитить паролем"
+msgstr "Protect with password"
+
+#, python-format
+msgid "Максимальный размер: %(size)s МБ"
+msgstr "Maximum size: %(size)s MB"
+
+msgid "Пожалуйста, выберите файл для загрузки."
+msgstr "Please select a file to upload."
+
+#, python-format
+msgid "Размер файла не должен превышать %(size)s МБ."
+msgstr "File size must not exceed %(size)s MB."
+
+msgid "Код не указан"
+msgstr "Code not specified"
+
+msgid "Код занят"
+msgstr "Code taken"
+
+msgid "Код доступен"
+msgstr "Code available"
+
+msgid "Этот код уже используется. Выберите другой."
+msgstr "This code is already in use. Choose another."
+
+msgid "Укажите пароль, если включена защита."
+msgstr "Provide a password when protection is enabled."
+
+#, fuzzy
+#| msgid "У вас нет прав для доступа к этой странице."
+msgid "Введите пароль для доступа к файлу"
+msgstr "Enter the password to access the file"
+
+msgid "Пароль"
+msgstr "Password"
+
+#, fuzzy
+#| msgid "Неверный запрос."
+msgid "Неверный пароль."
+msgstr "Incorrect password."
+
+msgid "Введите новый код"
+msgstr "Enter new code"
+
+msgid "Оставьте пустым, чтобы не изменять"
+msgstr "Leave empty to keep unchanged"
+
+msgid "Введите новый пароль"
+msgstr "Enter new password"
+
+msgid "Оставьте пустым, чтобы убрать пароль"
+msgstr "Leave empty to remove the password"
+
+#, python-format
+msgid "Файл успешно загружен! Код: %(code)s"
+msgstr "File uploaded successfully! Code: %(code)s"
+
+msgid "Файл истек и больше недоступен."
+msgstr "File has expired and is no longer available."
+
+msgid "Файл истек и больше недоступен для редактирования."
+msgstr "File has expired and is no longer available for editing."
+
+msgid "Информация о файле обновлена!"
+msgstr "File information updated!"
+
+msgid "Файл истек и больше недоступен для удаления."
+msgstr "File has expired and is no longer available for deletion."
+
+msgid "Файл успешно удален!"
+msgstr "File deleted successfully!"
+
+msgid "Неверный запрос (400)"
+msgstr "Bad request (400)"
+
+msgid "Неверный запрос."
+msgstr "The request was invalid."
+
+msgid "Вернуться на главную"
+msgstr "Back to home"
+
+msgid "Доступ запрещен (403)"
+msgstr "Forbidden (403)"
+
+msgid "У вас нет прав для доступа к этой странице."
+msgstr "You do not have permission to access this page."
+
+msgid "Страница не найдена (404)"
+msgstr "Page not found (404)"
+
+msgid "К сожалению, такая страница не существует."
+msgstr "Unfortunately, this page does not exist."
+
+msgid "Внутренняя ошибка сервера (500)"
+msgstr "Internal server error (500)"
+
+msgid "Что-то пошло не так. Мы уже работаем над этим."
+msgstr "Something went wrong. We are working on it."
+
+msgid "Основная навигация"
+msgstr "Main navigation"
+
+msgid "Главная"
+msgstr "Home"
+
+msgid "Мои файлы"
+msgstr "My files"
+
+msgid "Поиск по файлам"
+msgstr "Search files"
+
+msgid "Поиск файлов"
+msgstr "Search files"
+
+msgid "Поиск среди ваших файлов..."
+msgstr "Search among your files..."
+
+msgid "Поиск"
+msgstr "Search"
+
+msgid "Найти"
+msgstr "Find"
+
+msgid "Переключение темы"
+msgstr "Theme switcher"
+
+msgid "Светлая тема (Ctrl+T)"
+msgstr "Light theme (Ctrl+T)"
+
+msgid "Светлая тема"
+msgstr "Light theme"
+
+msgid "Темная тема (Ctrl+T)"
+msgstr "Dark theme (Ctrl+T)"
+
+msgid "Темная тема"
+msgstr "Dark theme"
+
+msgid "Выбор языка"
+msgstr "Language selection"
+
+msgid "Быстрая и безопасная передача файлов"
+msgstr "Fast and secure file transfer"
+
+msgid "Все права защищены."
+msgstr "All rights reserved."
+
+msgid "Мы используем cookies для улучшения работы сайта."
+msgstr "We use cookies to improve site performance."
+
+msgid "Согласен"
+msgstr "OK"
+
+msgid "Удалить"
+msgstr "Delete"
+
+msgid "Подтверждение удаления"
+msgstr "Delete confirmation"
+
+msgid "Код:"
+msgstr "Code:"
+
+msgid "МБ"
+msgstr "MB"
+
+msgid "Внимание!"
+msgstr "Attention!"
+
+#, python-format
+msgid "Вы собираетесь удалить файл \"<strong>%(filename)s</strong>\"."
+msgstr "You are about to delete the file \"<strong>%(filename)s</strong>\"."
+
+msgid "Это действие нельзя отменить. Файл будет удален навсегда."
+msgstr "This action cannot be undone. The file will be permanently deleted."
+
+#, fuzzy
+#| msgid "Поиск по файлам"
+msgid "Детали файла:"
+msgstr "File details:"
+
+msgid "Размер:"
+msgstr "Size:"
+
+msgid "Загружен:"
+msgstr "Uploaded:"
+
+msgid "Скачиваний:"
+msgstr "Downloads:"
+
+msgid "Истекает:"
+msgstr "Expires:"
+
+msgid "Защита:"
+msgstr "Protection:"
+
+msgid "Открытый"
+msgstr "Public"
+
+msgid "Да, удалить файл"
+msgstr "Yes, delete file"
+
+msgid "Отмена"
+msgstr "Cancel"
+
+msgid "Что произойдет при удалении?"
+msgstr "What happens when deleting?"
+
+msgid "Файл будет удален с сервера навсегда"
+msgstr "The file will be removed from the server permanently"
+
+msgid "QR код также будет удален"
+msgstr "The QR code will also be deleted"
+
+msgid "Ссылка на файл перестанет работать"
+msgstr "The file link will stop working"
+
+msgid "Восстановить файл будет невозможно"
+msgstr "Restoring the file will be impossible"
+
+#, fuzzy
+#| msgid "Мои файлы"
+msgid "Код файла"
+msgstr "File code"
+
+#, fuzzy
+#| msgid "Поиск по файлам"
+msgid "Тип файла"
+msgstr "File type"
+
+msgid "Размер"
+msgstr "Size"
+
+msgid "Загружен"
+msgstr "Uploaded"
+
+msgid "Истекает"
+msgstr "Expires"
+
+msgid "Скачиваний"
+msgstr "Downloads"
+
+msgid "Защита"
+msgstr "Protection"
+
+#, fuzzy
+#| msgid "Поиск файлов"
+msgid "Скачать файл"
+msgstr "Download file"
+
+msgid "Редактировать"
+msgstr "Edit"
+
+msgid "Копировать ссылку"
+msgstr "Copy link"
+
+#, fuzzy
+#| msgid "Мои файлы"
+msgid "Удалить файл"
+msgstr "Delete file"
+
+msgid "QR код"
+msgstr "QR code"
+
+msgid "Скачать QR код"
+msgstr "Download QR code"
+
+msgid "Поделиться"
+msgstr "Share"
+
+msgid "QR код генерируется..."
+msgstr "QR code is generating..."
+
+#, fuzzy
+#| msgid "Поиск по файлам"
+msgid "Ссылка на файл"
+msgstr "File link"
+
+msgid "Поделитесь этой ссылкой для доступа к файлу"
+msgstr "Share this link to access the file"
+
+msgid "Оставшееся время"
+msgstr "Time remaining"
+
+#, python-format
+msgid "Файл будет автоматически удален %(date)s"
+msgstr "The file will be automatically deleted on %(date)s"
+
+#, fuzzy
+#| msgid "Быстрая и безопасная передача файлов"
+msgid "Быстрая передача файлов"
+msgstr "Fast file transfer"
+
+msgid ""
+"Загружайте файлы мгновенно и делитесь ими безопасно. Автоматическое удаление "
+"через 24 часа."
+msgstr "Upload files instantly and share securely. Automatically deleted after 24 hours."
+
+msgid "Загрузить файл"
+msgstr "Upload file"
+
+#, fuzzy
+#| msgid "Мои файлы"
+msgid "Последние файлы"
+msgstr "Recent files"
+
+msgid "Почему 0123.ru?"
+msgstr "Why 0123.ru?"
+
+msgid "Быстрая передача файлов без регистрации и лишних хлопот"
+msgstr "Fast file transfer without registration or hassle"
+
+#, fuzzy
+#| msgid "Основная навигация"
+msgid "Мгновенная загрузка"
+msgstr "Instant upload"
+
+msgid ""
+"Загружайте файлы до 25MB за считанные секунды с интуитивно понятным "
+"интерфейсом"
+msgstr ""
+"Upload files up to 25MB in seconds with an intuitive interface"
+
+msgid "QR-коды"
+msgstr "QR codes"
+
+msgid "Генерируйте QR-коды для быстрого доступа к файлам с мобильных устройств"
+msgstr "Generate QR codes for quick access on mobile devices"
+
+msgid "Безопасность"
+msgstr "Security"
+
+msgid "Защищайте файлы паролем и автоматически удаляйте их через 24 часа"
+msgstr "Protect files with a password and auto-delete after 24 hours"
+
+msgid "Адаптивность"
+msgstr "Responsiveness"
+
+msgid "Адаптивный интерфейс, который отлично работает на всех устройствах"
+msgstr "Responsive UI that works great on all devices"
+
+#, fuzzy
+#| msgid "Поиск по файлам"
+msgid "Загрузка файла"
+msgstr "File upload"
+
+msgid "Перетащите файл сюда или нажмите для выбора"
+msgstr "Drag a file here or click to select"
+
+msgid "Максимальный размер: 25MB"
+msgstr "Maximum size: 25MB"
+
+msgid "Кастомный код (необязательно)"
+msgstr "Custom code (optional)"
+
+msgid "Введите желаемый код для файла"
+msgstr "Enter desired code for the file"
+
+msgid ""
+"Любые символы, до 50 знаков. Оставьте пустым для автоматической генерации."
+msgstr "Any characters, up to 50 chars. Leave empty for auto-generation."
+
+msgid "Пароль (необязательно)"
+msgstr "Password (optional)"
+
+msgid "Защитить файл паролем"
+msgstr "Protect file with password"
+
+#, fuzzy
+#| msgid "Поиск файлов"
+msgid "Всего файлов"
+msgstr "Total files"
+
+msgid "Загружено сегодня"
+msgstr "Uploaded today"
+
+msgid "Максимальный размер"
+msgstr "Maximum size"
+
+msgid "Время хранения"
+msgstr "Retention time"
+
+#, fuzzy
+#| msgid "Мои файлы"
+msgid "Мои недавние файлы"
+msgstr "My recent files"
+
+msgid "назад"
+msgstr "ago"
+
+msgid "Файл защищен паролем"
+msgstr "File is password-protected"
+
+msgid "Истек"
+msgstr "Expired"
+
+msgid "Просмотр"
+msgstr "View"
+
+msgid "Скачать"
+msgstr "Download"
+
+#, fuzzy
+#| msgid "Поиск файлов"
+msgid "У вас пока нет файлов"
+msgstr "You don't have any files yet"
+
+msgid "Загрузите первый файл, чтобы начать!"
+msgstr "Upload your first file to get started!"
+
+#, fuzzy
+#| msgid "Поиск среди ваших файлов..."
+msgid "Посмотреть все мои файлы"
+msgstr "View all my files"
+
+msgid "Файл успешно загружен!"
+msgstr "File uploaded successfully!"
+
+msgid "Ваш файл готов к использованию"
+msgstr "Your file is ready to use"
+
+#, fuzzy
+#| msgid "Поиск файлов"
+msgid "Имя файла"
+msgstr "File name"
+
+msgid "Быстрые действия"
+msgstr "Quick actions"
+
+msgid "Загрузить еще файл"
+msgstr "Upload another file"
+
+#, fuzzy
+#| msgid "Поиск файлов"
+msgid "Перейти к файлу"
+msgstr "Go to file"
+
+msgid "Пароль требуется"
+msgstr "Password required"
+
+msgid "Введите пароль"
+msgstr "Enter password"
+
+msgid "Открыть файл"
+msgstr "Open file"
+
+msgid "Этот файл защищен паролем для обеспечения конфиденциальности."
+msgstr "This file is password-protected for privacy."
+
+msgid "Введите правильный пароль для доступа."
+msgstr "Enter the correct password to access."
+
+msgid "Назад"
+msgstr "Back"
+
+msgid "Ваши загруженные файлы"
+msgstr "Your uploaded files"
+
+msgid "В текущей сессии вы еще не загружали файлы"
+msgstr "You haven't uploaded any files in this session yet"
+
+msgid "Для просмотра ваших файлов необходимо загрузить хотя бы один файл"
+msgstr "To view your files, you need to upload at least one file"
+
+msgid "Просмотреть"
+msgstr "View"
+
+msgid "Страница %(current)s из %(total)s (%(count)s файлов всего)"
+msgstr "Page %(current)s of %(total)s (%(count)s files total)"
+
+msgid "В текущей сессии вы еще не загружали файлы."
+msgstr "You haven't uploaded any files in this session."
+
+#, fuzzy
+#| msgid "Страница не найдена (404)"
+msgid "Сессия не найдена"
+msgstr "Session not found"
+
+msgid "Для просмотра ваших файлов необходимо загрузить хотя бы один файл."
+msgstr "To view your files, you need to upload at least one file."
+
+msgid "Это создаст анонимную сессию для вас."
+msgstr "This will create an anonymous session for you."
+
+msgid "Результаты поиска"
+msgstr "Search results"
+
+#, python-format
+msgid ""
+"По запросу \"<strong>%(q)s</strong>\" найдено %(count)s файлов среди ваших "
+"загруженных файлов"
+msgstr ""
+"Found %(count)s files for query \"<strong>%(q)s</strong>\" among your "
+"uploaded files"
+
+msgid "Нет активной сессии"
+msgstr "No active session"
+
+msgid "Для поиска файлов необходимо загрузить хотя бы один файл."
+msgstr "To search files, you need to upload at least one file."
+
+#, fuzzy
+#| msgid "Поиск среди ваших файлов..."
+msgid "Поиск доступен только среди ваших собственных файлов."
+msgstr "Search is available only among your own files."
+
+msgid "Осталось"
+msgstr "Remaining"
+
+#, fuzzy
+#| msgid "Поиск по файлам"
+msgid "Навигация по страницам"
+msgstr "Page navigation"
+
+#, fuzzy
+#| msgid "Страница не найдена (404)"
+msgid "No files found"
+msgstr "No files found"
+
+#, python-format
+msgid ""
+"По запросу \"<strong>%(q)s</strong>\" среди ваших файлов ничего не найдено."
+msgstr ""
+
+msgid ""
+"Попробуйте изменить поисковый запрос или проверьте правильность написания."
+msgstr ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "Site Maps"
+msgstr ""
+
+msgid "Static Files"
+msgstr ""
+
+msgid "Syndication"
+msgstr ""
+
+#. Translators: String used to replace omitted page numbers in elided page
+#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
+msgid "…"
+msgstr ""
+
+msgid "That page number is not an integer"
+msgstr ""
+
+msgid "That page number is less than 1"
+msgstr ""
+
+msgid "That page contains no results"
+msgstr ""
+
+msgid "Enter a valid value."
+msgstr ""
+
+msgid "Enter a valid domain name."
+msgstr ""
+
+msgid "Enter a valid URL."
+msgstr ""
+
+msgid "Enter a valid integer."
+msgstr ""
+
+msgid "Enter a valid email address."
+msgstr ""
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+
+#, python-format
+msgid "Enter a valid %(protocol)s address."
+msgstr ""
+
+msgid "IPv4"
+msgstr ""
+
+msgid "IPv6"
+msgstr ""
+
+msgid "IPv4 or IPv6"
+msgstr ""
+
+msgid "Enter only digits separated by commas."
+msgstr ""
+
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+#, python-format
+msgid "Ensure this value is a multiple of step size %(limit_value)s."
+msgstr ""
+
+#, python-format
+msgid ""
+"Ensure this value is a multiple of step size %(limit_value)s, starting from "
+"%(offset)s, e.g. %(offset)s, %(valid_value1)s, %(valid_value2)s, and so on."
+msgstr ""
+
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Enter a number."
+msgstr ""
+
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
+msgstr ""
+
+msgid "Null characters are not allowed."
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr ""
+
+#, python-format
+msgid "Constraint “%(name)s” is violated."
+msgstr ""
+
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+msgid "This field cannot be null."
+msgstr ""
+
+msgid "This field cannot be blank."
+msgstr ""
+
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr ""
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or
+#. 'month'. Eg: "Title must be unique for pub_date year"
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be either True or False."
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
+msgstr ""
+
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+msgid "String (unlimited)"
+msgstr ""
+
+msgid "Comma-separated integers"
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+msgid "Date (without time)"
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+msgid "Date (with time)"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr ""
+
+msgid "Decimal number"
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
+"uuuuuu] format."
+msgstr ""
+
+msgid "Duration"
+msgstr ""
+
+msgid "Email address"
+msgstr ""
+
+msgid "File path"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr ""
+
+msgid "Floating point number"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr ""
+
+msgid "Integer"
+msgstr ""
+
+msgid "Big (8 byte) integer"
+msgstr ""
+
+msgid "Small integer"
+msgstr ""
+
+msgid "IPv4 address"
+msgstr ""
+
+msgid "IP address"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr ""
+
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+msgid "Positive big integer"
+msgstr ""
+
+msgid "Positive integer"
+msgstr ""
+
+msgid "Positive small integer"
+msgstr ""
+
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Raw binary data"
+msgstr ""
+
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr ""
+
+msgid "Universally unique identifier"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "A JSON object"
+msgstr ""
+
+msgid "Value must be valid JSON."
+msgstr ""
+
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r is not a valid choice."
+msgstr ""
+
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+msgid "One-to-one relationship"
+msgstr ""
+
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to the label
+msgid ":?.!"
+msgstr ""
+
+msgid "This field is required."
+msgstr ""
+
+msgid "Enter a whole number."
+msgstr ""
+
+msgid "Enter a valid date."
+msgstr ""
+
+msgid "Enter a valid time."
+msgstr ""
+
+msgid "Enter a valid date/time."
+msgstr ""
+
+msgid "Enter a valid duration."
+msgstr ""
+
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr ""
+
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+msgid "No file was submitted."
+msgstr ""
+
+msgid "The submitted file is empty."
+msgstr ""
+
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+msgid "Enter a list of values."
+msgstr ""
+
+msgid "Enter a complete value."
+msgstr ""
+
+msgid "Enter a valid UUID."
+msgstr ""
+
+msgid "Enter a valid JSON."
+msgstr ""
+
+#. Translators: This is the default suffix added to form field labels
+msgid ":"
+msgstr ""
+
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"ManagementForm data is missing or has been tampered with. Missing fields: "
+"%(field_names)s. You may need to file a bug report if the issue persists."
+msgstr ""
+
+#, python-format
+msgid "Please submit at most %(num)d form."
+msgid_plural "Please submit at most %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "Please submit at least %(num)d form."
+msgid_plural "Please submit at least %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Order"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+msgid "Please correct the duplicate values below."
+msgstr ""
+
+msgid "The inline value did not match the parent instance."
+msgstr ""
+
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr ""
+
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid "Currently"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+#. Translators: Please do not add spaces around commas.
+msgid "yes,no,maybe"
+msgstr ""
+
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#, python-format
+msgid "%s MB"
+msgstr ""
+
+#, python-format
+msgid "%s GB"
+msgstr ""
+
+#, python-format
+msgid "%s TB"
+msgstr ""
+
+#, python-format
+msgid "%s PB"
+msgstr ""
+
+msgid "p.m."
+msgstr ""
+
+msgid "a.m."
+msgstr ""
+
+msgid "PM"
+msgstr ""
+
+msgid "AM"
+msgstr ""
+
+msgid "midnight"
+msgstr ""
+
+msgid "noon"
+msgstr ""
+
+msgid "Monday"
+msgstr ""
+
+msgid "Tuesday"
+msgstr ""
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Thursday"
+msgstr ""
+
+msgid "Friday"
+msgstr ""
+
+msgid "Saturday"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
+msgid "Mon"
+msgstr ""
+
+msgid "Tue"
+msgstr ""
+
+msgid "Wed"
+msgstr ""
+
+msgid "Thu"
+msgstr ""
+
+msgid "Fri"
+msgstr ""
+
+msgid "Sat"
+msgstr ""
+
+msgid "Sun"
+msgstr ""
+
+msgid "January"
+msgstr ""
+
+msgid "February"
+msgstr ""
+
+msgid "March"
+msgstr ""
+
+msgid "April"
+msgstr ""
+
+msgid "May"
+msgstr ""
+
+msgid "June"
+msgstr ""
+
+msgid "July"
+msgstr ""
+
+msgid "August"
+msgstr ""
+
+msgid "September"
+msgstr ""
+
+msgid "October"
+msgstr ""
+
+msgid "November"
+msgstr ""
+
+msgid "December"
+msgstr ""
+
+msgid "jan"
+msgstr ""
+
+msgid "feb"
+msgstr ""
+
+msgid "mar"
+msgstr ""
+
+msgid "apr"
+msgstr ""
+
+msgid "may"
+msgstr ""
+
+msgid "jun"
+msgstr ""
+
+msgid "jul"
+msgstr ""
+
+msgid "aug"
+msgstr ""
+
+msgid "sep"
+msgstr ""
+
+msgid "oct"
+msgstr ""
+
+msgid "nov"
+msgstr ""
+
+msgid "dec"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "March"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "April"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "May"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "June"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "July"
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr ""
+
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr ""
+
+msgctxt "alt. month"
+msgid "January"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "February"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "March"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "April"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "May"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "June"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "July"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "August"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "September"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "October"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "November"
+msgstr ""
+
+msgctxt "alt. month"
+msgid "December"
+msgstr ""
+
+msgid "This is not a valid IPv6 address."
+msgstr ""
+
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+#. Translators: This string is used as a separator between list elements
+msgid ", "
+msgstr ""
+
+#, python-format
+msgid "%(num)d year"
+msgid_plural "%(num)d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(num)d month"
+msgid_plural "%(num)d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(num)d week"
+msgid_plural "%(num)d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(num)d day"
+msgid_plural "%(num)d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(num)d hour"
+msgid_plural "%(num)d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(num)d minute"
+msgid_plural "%(num)d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Forbidden"
+msgstr ""
+
+msgid "CSRF verification failed. Request aborted."
+msgstr ""
+
+msgid ""
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
+msgstr ""
+
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" …> for links to third-party sites."
+msgstr ""
+
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
+msgstr ""
+
+msgid "More information is available with DEBUG=True."
+msgstr ""
+
+msgid "No year specified"
+msgstr ""
+
+msgid "Date out of range"
+msgstr ""
+
+msgid "No month specified"
+msgstr ""
+
+msgid "No day specified"
+msgstr ""
+
+msgid "No week specified"
+msgstr ""
+
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because %(class_name)s."
+"allow_future is False."
+msgstr ""
+
+#, python-format
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+msgstr ""
+
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr ""
+
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#, python-format
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
+msgstr ""
+
+msgid "Directory indexes are not allowed here."
+msgstr ""
+
+#, python-format
+msgid "“%(path)s” does not exist"
+msgstr ""
+
+#, python-format
+msgid "Index of %(directory)s"
+msgstr ""
+
+msgid "The install worked successfully! Congratulations!"
+msgstr ""
+
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" "
+"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
+"configured any URLs."
+msgstr ""
+
+msgid "Django Documentation"
+msgstr ""
+
+msgid "Topics, references, &amp; how-to’s"
+msgstr ""
+
+msgid "Tutorial: A Polling App"
+msgstr ""
+
+msgid "Get started with Django"
+msgstr ""
+
+msgid "Django Community"
+msgstr ""
+
+msgid "Connect, get help, or contribute"
+msgstr ""

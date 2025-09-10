@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Последние файлы - 0123.ru{% endblock %}
+{% block title %}{% trans 'Последние файлы' %} - 0123.ru{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -11,11 +12,11 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <a href="{% url 'files:home' %}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-2"></i>
-                        Назад
+                        {% trans 'Назад' %}
                     </a>
                     <h2 class="mb-0">
                         <i class="fas fa-user me-2"></i>
-                        Мои файлы
+                        {% trans 'Мои файлы' %}
                         {% if has_files %}
                             <span class="badge bg-primary ms-2">{{ total_files }}</span>
                         {% endif %}
@@ -25,12 +26,12 @@
                 <p class="lead text-muted">
                     {% if has_session %}
                         {% if has_files %}
-                            Ваши загруженные файлы
+                            {% trans 'Ваши загруженные файлы' %}
                         {% else %}
-                            В текущей сессии вы еще не загружали файлы
+                            {% trans 'В текущей сессии вы еще не загружали файлы' %}
                         {% endif %}
                     {% else %}
-                        Для просмотра ваших файлов необходимо загрузить хотя бы один файл
+                        {% trans 'Для просмотра ваших файлов необходимо загрузить хотя бы один файл' %}
                     {% endif %}
                 </p>
             </div>
@@ -64,7 +65,7 @@
                                             {{ file.filename|truncatechars:25 }}
                                         </h6>
                                         <p class="text-muted small mb-0">
-                                            Код: <strong>{{ file.code }}</strong>
+                                            {% trans 'Код:' %} <strong>{{ file.code }}</strong>
                                         </p>
                                         <small class="badge {{ file.get_file_type_color }} bg-light">
                                             {{ file.get_file_type_name }}
@@ -76,19 +77,19 @@
                                     <div class="row text-center">
                                         <div class="col-4">
                                             <div class="stat-item">
-                                                <small class="text-muted d-block">Размер</small>
+                                                <small class="text-muted d-block">{% trans 'Размер' %}</small>
                                                 <strong>{{ file.get_file_size_mb }} МБ</strong>
                                             </div>
                                         </div>
                                         <div class="col-4">
                                             <div class="stat-item">
-                                                <small class="text-muted d-block">Скачиваний</small>
+                                                <small class="text-muted d-block">{% trans 'Скачиваний' %}</small>
                                                 <strong>{{ file.download_count }}</strong>
                                             </div>
                                         </div>
                                         <div class="col-4">
                                             <div class="stat-item">
-                                                <small class="text-muted d-block">Загружен</small>
+                                                <small class="text-muted d-block">{% trans 'Загружен' %}</small>
                                                 <strong>{{ file.created_at|date:"d.m" }}</strong>
                                             </div>
                                         </div>
@@ -99,13 +100,13 @@
                                     <a href="{% url 'files:file_detail' file.code %}" 
                                        class="btn btn-primary btn-sm">
                                         <i class="fas fa-eye me-1"></i>
-                                        Просмотреть
+                                        {% trans 'Просмотреть' %}
                                     </a>
                                     <div class="btn-group" role="group">
                                         <a href="{% url 'files:download_file' file.code %}" 
                                            class="btn btn-outline-success btn-sm">
                                             <i class="fas fa-download me-1"></i>
-                                            Скачать
+                                            {% trans 'Скачать' %}
                                         </a>
                                         <a href="{% url 'files:edit_file' file.code %}" 
                                            class="btn btn-outline-secondary btn-sm">
@@ -122,7 +123,7 @@
                                         {{ file.created_at|date:"d.m.Y H:i" }}
                                     </small>
                                     <small class="text-muted">
-                                        Истекает: {{ file.expires_at|date:"d.m H:i" }}
+                                        {% trans 'Истекает:' %} {{ file.expires_at|date:"d.m H:i" }}
                                     </small>
                                 </div>
                             </div>
@@ -168,8 +169,7 @@
                 <!-- Page Info -->
                 <div class="text-center mt-3">
                     <small class="text-muted">
-                        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
-                        ({{ total_files }} файлов всего)
+                        {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages count=total_files %}Страница {{ current }} из {{ total }} ({{ count }} файлов всего){% endblocktrans %}
                     </small>
                 </div>
                 {% endif %}
@@ -180,27 +180,27 @@
                     {% if has_session %}
                         <div class="empty-state">
                             <i class="fas fa-folder-open fa-4x text-muted mb-4"></i>
-                            <h4 class="mb-3">У вас пока нет файлов</h4>
+                            <h4 class="mb-3">{% trans 'У вас пока нет файлов' %}</h4>
                             <p class="text-muted mb-4">
-                                В текущей сессии вы еще не загружали файлы.
-                                <br>Загрузите первый файл, чтобы начать!
+                                {% trans 'В текущей сессии вы еще не загружали файлы.' %}
+                                <br>{% trans 'Загрузите первый файл, чтобы начать!' %}
                             </p>
                             <a href="{% url 'files:home' %}" class="btn btn-primary btn-lg">
                                 <i class="fas fa-upload me-2"></i>
-                                Загрузить файл
+                                {% trans 'Загрузить файл' %}
                             </a>
                         </div>
                     {% else %}
                         <div class="empty-state">
                             <i class="fas fa-exclamation-triangle fa-4x text-warning mb-4"></i>
-                            <h4 class="mb-3">Сессия не найдена</h4>
+                            <h4 class="mb-3">{% trans 'Сессия не найдена' %}</h4>
                             <p class="text-muted mb-4">
-                                Для просмотра ваших файлов необходимо загрузить хотя бы один файл.
-                                <br>Это создаст анонимную сессию для вас.
+                                {% trans 'Для просмотра ваших файлов необходимо загрузить хотя бы один файл.' %}
+                                <br>{% trans 'Это создаст анонимную сессию для вас.' %}
                             </p>
                             <a href="{% url 'files:home' %}" class="btn btn-primary btn-lg">
                                 <i class="fas fa-upload me-2"></i>
-                                Загрузить файл
+                                {% trans 'Загрузить файл' %}
                             </a>
                         </div>
                     {% endif %}

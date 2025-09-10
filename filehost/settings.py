@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -79,6 +80,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.i18n',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -128,6 +130,15 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 
 USE_TZ = True
+
+LANGUAGES = [
+    ('ru', 'Русский'),
+    ('en', 'English'),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 
 # Static files (CSS, JavaScript, Images)
@@ -237,8 +248,11 @@ if not DEBUG:
     CSRF_COOKIE_HTTPONLY = True
     
     # Настройки логирования для продакшена
-    LOG_FILE = os.getenv('LOG_FILE', '/var/log/django/app.log')
+    LOG_FILE = os.getenv('LOG_FILE', os.path.join(BASE_DIR, 'logs', 'django.log'))
     if LOG_FILE:
+        # Убеждаемся, что директория logs существует
+        os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+        
         LOGGING['handlers']['file'] = {
             'level': 'INFO',
             'class': 'logging.FileHandler',

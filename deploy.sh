@@ -85,11 +85,21 @@ chown $SERVICE_USER:$SERVICE_GROUP /var/log/gunicorn
 cp gunicorn.conf.py $PROJECT_DIR/
 chown $SERVICE_USER:$SERVICE_GROUP $PROJECT_DIR/gunicorn.conf.py
 
+echo -e "${YELLOW}🔧 Setting up Celery...${NC}"
+mkdir -p /var/log/celery /var/run/celery
+chown $SERVICE_USER:$SERVICE_GROUP /var/log/celery /var/run/celery
+
+# Copy Celery configs
+cp filehost/celery.py $PROJECT_DIR/
+chown $SERVICE_USER:$SERVICE_GROUP $PROJECT_DIR/celery.py
+
 echo -e "${YELLOW}⚙️ Setting up systemd service...${NC}"
-# Copy service file
+# Copy service files
 cp filehost.service /etc/systemd/system/
+cp celery.service /etc/systemd/system/
+cp celerybeat.service /etc/systemd/system/
 systemctl daemon-reload
-systemctl enable filehost
+systemctl enable filehost celery celerybeat
 
 echo -e "${YELLOW}🌐 Configuring Nginx...${NC}"
 # Copy Nginx config
@@ -109,11 +119,13 @@ ufw allow 'Nginx Full'
 ufw --force enable
 
 echo -e "${YELLOW}🚀 Starting services...${NC}"
-systemctl start filehost
+systemctl start filehost celery celerybeat
 systemctl restart nginx
 
 echo -e "${YELLOW}✅ Checking service status...${NC}"
 systemctl status filehost --no-pager
+systemctl status celery --no-pager
+systemctl status celerybeat --no-pager
 systemctl status nginx --no-pager
 
 echo -e "${GREEN}🎉 Deployment completed successfully!${NC}"

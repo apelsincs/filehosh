@@ -1,0 +1,18 @@
+{% load i18n static %}
+{% extends 'base.html' %}
+
+{% block title %}{% trans 'Страница не найдена (404)' %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4">404</h1>
+            <p class="lead">{% trans 'К сожалению, такая страница не существует.' %}</p>
+            <a class="btn btn-primary mt-3" href="/">{% trans 'Вернуться на главную' %}</a>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+
